@@ -13,3 +13,4 @@ properties/*.ini
 .ipynb_checkpoints/*
 *import.report*
 *ipynb*
+logs/*
