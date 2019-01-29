@@ -1,0 +1,122 @@
+﻿///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='£#,##0.00;-£#,##0.00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YYYY';
+SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
+SET FirstWeekDay=0;
+SET BrokenWeeks=0;
+SET ReferenceDay=4;
+SET FirstMonthOfYear=1;
+SET CollationLocale='en-GB';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET LongMonthNames='January;February;March;April;May;June;July;August;September;October;November;December';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+SET LongDayNames='Monday;Tuesday;Wednesday;Thursday;Friday;Saturday;Sunday';
+///$tab Initialize
+QUALIFY *;
+
+UNQUALIFY %AccountGuid;
+UNQUALIFY #AccountName;
+UNQUALIFY %ChildAccountGuid;
+UNQUALIFY %CommodityGuid;
+UNQUALIFY %ParentAccountGuid;
+UNQUALIFY %TxGuid;
+///$tab accounts
+ODBC CONNECT TO [SQLite3 Datasource;Database=C:\temp\herman.gnucash];
+
+accounts:
+LOAD guid as %AccountGuid,
+    name as #AccountName,
+    "account_type",
+    "commodity_guid" as commodityGuid,
+    "commodity_scu" as commodityScu,
+    "non_std_scu" as nonStdScu,
+    "parent_guid",
+    code,
+    description,
+    hidden,
+    placeholder;
+SQL SELECT *
+FROM accounts;
+
+acc_hierarchy:
+Hierarchy (%ChildAccountGuid, %ParentAccountGuid, #AccountName, ParentName, #AccountName, PathName, '/', Depth)
+Load %AccountGuid as %ChildAccountGuid,
+	#AccountName,
+	[accounts.parent_guid] as %ParentAccountGuid
+Resident accounts;
+///$tab commodities
+commodities:
+LOAD guid as %CommodityGuid,
+    namespace,
+    mnemonic,
+    fullname,
+    cusip,
+    fraction,
+    "quote_flag" as quoteFlag,
+    "quote_source" as quoteSource,
+    "quote_tz" as quoteTz;
+SQL SELECT *
+FROM commodities;
+///$tab splits
+splits:
+LOAD guid,
+    "tx_guid" as %TxGuid,
+    "account_guid" as %AccountGuid,
+    memo,
+    action,
+    "reconcile_state" as reconcileState,
+    "reconcile_date" as reconcileDate,
+    "value_num" as valueNum,
+    "value_denom" as valueDenom,
+    "value_num" / "value_denom" as value,
+    "quantity_num" as quantityNum,
+    "quantity_denom" as quantityDenom,
+    "quantity_num" / "quantity_denom" as quantity,
+    "lot_guid" as lotGuid;
+SQL SELECT *
+FROM splits;
+
+///$tab transactions
+transactions:
+LOAD guid as %TxGuid,
+    "currency_guid" as %CommodityGuid,
+    num,
+    "post_date" as postDate,
+    Year("post_date") as Year,
+    Month("post_date") as Month,
+    "enter_date" as enterDate,
+    description;
+SQL SELECT *
+FROM transactions;
+
+/*
+Temp:
+LOAD
+     Min(transactions.postDate) as MinDate,
+     Max(transactions.postDate) as MaxDate
+Resident transactions;
+
+LET vMinDate = floor(peek('Temp.MinDate'));
+LET vMaxDate = floor(peek('Temp.MaxDate'));
+DROP Table Temp;
+*/
+///$tab prices
+prices:
+LOAD guid,
+    "commodity_guid" as %CommodityGuid,
+    "currency_guid" as currencyGuid,
+    Date(date, 'DD-MM-YYYY') as date,
+    source,
+    type,
+    "value_num" as valueNum,
+    "value_denom" as valueDenom,
+    "value_num" / "value_denom" as value;
+SQL SELECT *
+FROM prices;
+///$tab exit
+exit script;
