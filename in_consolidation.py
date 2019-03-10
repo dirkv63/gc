@@ -5,7 +5,7 @@ This script will find and consolidate all transactions in IN account during a sp
 import logging
 import os
 import piecash
-from lib import  gc
+from lib import gc
 from lib import my_env
 from lib import write2excel
 
@@ -43,4 +43,3 @@ xl.write_content(xl_arr)
 
 fn = os.path.join(cfg["Main"]["reportdir"], "MCF201806.xlsx")
 xl.close_workbook(fn)
-
