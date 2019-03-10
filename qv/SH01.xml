@@ -8,7 +8,7 @@
     <Italic>false</Italic>
     <DropShadow>false</DropShadow>
   </SheetFont>
-  <Name>Main</Name>
+  <Name>Transactions</Name>
   <UseApplicationBkg>true</UseApplicationBkg>
   <UseBkgImage>false</UseBkgImage>
   <UseColorBkg>false</UseColorBkg>

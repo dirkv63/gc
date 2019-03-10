@@ -20,35 +20,47 @@ SET LongDayNames='Monday;Tuesday;Wednesday;Thursday;Friday;Saturday;Sunday';
 QUALIFY *;
 
 UNQUALIFY %AccountGuid;
-UNQUALIFY #AccountName;
-UNQUALIFY %ChildAccountGuid;
 UNQUALIFY %CommodityGuid;
-UNQUALIFY %ParentAccountGuid;
+UNQUALIFY ParentGuid;
 UNQUALIFY %TxGuid;
+
+UNQUALIFY AccountName;
+
+SET fDate = 
+		// Date string starts with: 'YYYY-MM-DD' 
+		MAKEDATE(MID($1,1,4), MID($1,6,2), MID($1,9,2));
+
+SET vExpense = sum( {$<acc_hierarchy.AccountName1 = {'Uit'}>}  splits.value);
+SET vIncome = sum( {$<acc_hierarchy.AccountName1 = {'in'}>}  splits.value) * -1;
+SET vUitgaven = sum( {$<transactions.description = {[cn *]}>*$<AccountName = {[Giro+]}>}  splits.value) * -1;
+SET vVzw = sum( {$<acc_hierarchy.AccountName1 = {'vzw'}>}  splits.value);
+SET vVorticc = sum( {$<acc_hierarchy.AccountName1 = {'Vorticc'}>}  splits.value) * -1;
 ///$tab accounts
 ODBC CONNECT TO [SQLite3 Datasource;Database=C:\temp\herman.gnucash];
 
 accounts:
 LOAD guid as %AccountGuid,
-    name as #AccountName,
+    name,
     "account_type",
     "commodity_guid" as commodityGuid,
     "commodity_scu" as commodityScu,
-    "non_std_scu" as nonStdScu,
+//    "non_std_scu" as nonStdScu,
     "parent_guid",
-    code,
+//    code,
     description,
     hidden,
     placeholder;
 SQL SELECT *
-FROM accounts;
+FROM accounts
+WHERE NOT (name = 'Root Account');
 
 acc_hierarchy:
-Hierarchy (%ChildAccountGuid, %ParentAccountGuid, #AccountName, ParentName, #AccountName, PathName, '/', Depth)
-Load %AccountGuid as %ChildAccountGuid,
-	#AccountName,
-	[accounts.parent_guid] as %ParentAccountGuid
+Hierarchy (%AccountGuid, ParentGuid, AccountName, ParentName, AccountName, PathName, '/', Depth)
+Load %AccountGuid,
+	[accounts.name] as AccountName,
+	[accounts.parent_guid] as ParentGuid
 Resident accounts;
+
 ///$tab commodities
 commodities:
 LOAD guid as %CommodityGuid,
@@ -56,10 +68,10 @@ LOAD guid as %CommodityGuid,
     mnemonic,
     fullname,
     cusip,
-    fraction,
-    "quote_flag" as quoteFlag,
-    "quote_source" as quoteSource,
-    "quote_tz" as quoteTz;
+    fraction;
+//    "quote_flag" as quoteFlag,
+//    "quote_source" as quoteSource,
+//    "quote_tz" as quoteTz
 SQL SELECT *
 FROM commodities;
 ///$tab splits
@@ -70,14 +82,14 @@ LOAD guid,
     memo,
     action,
     "reconcile_state" as reconcileState,
-    "reconcile_date" as reconcileDate,
+    $(fDate("reconcile_date")) as reconcileDate,
     "value_num" as valueNum,
     "value_denom" as valueDenom,
     "value_num" / "value_denom" as value,
     "quantity_num" as quantityNum,
     "quantity_denom" as quantityDenom,
-    "quantity_num" / "quantity_denom" as quantity,
-    "lot_guid" as lotGuid;
+    "quantity_num" / "quantity_denom" as quantity;
+//    "lot_guid" as lotGuid;
 SQL SELECT *
 FROM splits;
 
@@ -86,10 +98,10 @@ transactions:
 LOAD guid as %TxGuid,
     "currency_guid" as %CommodityGuid,
     num,
-    "post_date" as postDate,
+    $(fDate("post_date")) as postDate,
     Year("post_date") as Year,
     Month("post_date") as Month,
-    "enter_date" as enterDate,
+    $(fDate("enter_date")) as enterDate,
     description;
 SQL SELECT *
 FROM transactions;
@@ -110,7 +122,7 @@ prices:
 LOAD guid,
     "commodity_guid" as %CommodityGuid,
     "currency_guid" as currencyGuid,
-    Date(date, 'DD-MM-YYYY') as date,
+    $(fDate(date)) as date,
     source,
     type,
     "value_num" as valueNum,
@@ -118,5 +130,24 @@ LOAD guid,
     "value_num" / "value_denom" as value;
 SQL SELECT *
 FROM prices;
+///$tab slots
+slots:
+Left Keep (transactions)
+LOAD 
+//	id,
+    "obj_guid" as %TxGuid,
+    name,
+//    "slot_type",
+//    "int64_val",
+    "string_val" as desc;
+//    "double_val",
+//    "timespec_val",
+//    "guid_val",
+//    "numeric_val_num",
+//    "numeric_val_denom",
+//    "gdate_val";
+SQL SELECT *
+FROM slots
+WHERE name = 'notes';
 ///$tab exit
 exit script;

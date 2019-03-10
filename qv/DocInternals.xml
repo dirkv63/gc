@@ -13,13 +13,13 @@
   </AlwaysLoose>
   <FieldSrcTables>
     <String>6</String>
-    <String>2</String>
-    <String>accounts</String>
-    <String>splits</String>
-    <String>7</String>
-    <String>2</String>
+    <String>3</String>
     <String>accounts</String>
     <String>acc_hierarchy</String>
+    <String>splits</String>
+    <String>7</String>
+    <String>1</String>
+    <String>accounts</String>
     <String>8</String>
     <String>1</String>
     <String>accounts</String>
@@ -43,10 +43,10 @@
     <String>accounts</String>
     <String>15</String>
     <String>1</String>
-    <String>accounts</String>
+    <String>acc_hierarchy</String>
     <String>16</String>
     <String>1</String>
-    <String>accounts</String>
+    <String>acc_hierarchy</String>
     <String>17</String>
     <String>1</String>
     <String>acc_hierarchy</String>
@@ -69,19 +69,19 @@
     <String>1</String>
     <String>acc_hierarchy</String>
     <String>24</String>
-    <String>1</String>
-    <String>acc_hierarchy</String>
-    <String>25</String>
-    <String>1</String>
-    <String>acc_hierarchy</String>
-    <String>26</String>
-    <String>1</String>
-    <String>acc_hierarchy</String>
-    <String>27</String>
     <String>3</String>
     <String>commodities</String>
     <String>transactions</String>
     <String>prices</String>
+    <String>25</String>
+    <String>1</String>
+    <String>commodities</String>
+    <String>26</String>
+    <String>1</String>
+    <String>commodities</String>
+    <String>27</String>
+    <String>1</String>
+    <String>commodities</String>
     <String>28</String>
     <String>1</String>
     <String>commodities</String>
@@ -90,29 +90,30 @@
     <String>commodities</String>
     <String>30</String>
     <String>1</String>
-    <String>commodities</String>
+    <String>splits</String>
     <String>31</String>
-    <String>1</String>
-    <String>commodities</String>
+    <String>3</String>
+    <String>splits</String>
+    <String>transactions</String>
+    <String>slots</String>
     <String>32</String>
     <String>1</String>
-    <String>commodities</String>
+    <String>splits</String>
     <String>33</String>
     <String>1</String>
-    <String>commodities</String>
+    <String>splits</String>
     <String>34</String>
     <String>1</String>
-    <String>commodities</String>
+    <String>splits</String>
     <String>35</String>
     <String>1</String>
-    <String>commodities</String>
+    <String>splits</String>
     <String>36</String>
     <String>1</String>
     <String>splits</String>
     <String>37</String>
-    <String>2</String>
+    <String>1</String>
     <String>splits</String>
-    <String>transactions</String>
     <String>38</String>
     <String>1</String>
     <String>splits</String>
@@ -127,73 +128,52 @@
     <String>splits</String>
     <String>42</String>
     <String>1</String>
-    <String>splits</String>
+    <String>transactions</String>
     <String>43</String>
     <String>1</String>
-    <String>splits</String>
+    <String>transactions</String>
     <String>44</String>
     <String>1</String>
-    <String>splits</String>
+    <String>transactions</String>
     <String>45</String>
     <String>1</String>
-    <String>splits</String>
+    <String>transactions</String>
     <String>46</String>
     <String>1</String>
-    <String>splits</String>
+    <String>transactions</String>
     <String>47</String>
     <String>1</String>
-    <String>splits</String>
+    <String>transactions</String>
     <String>48</String>
     <String>1</String>
-    <String>splits</String>
+    <String>prices</String>
     <String>49</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>prices</String>
     <String>50</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>prices</String>
     <String>51</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>prices</String>
     <String>52</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>prices</String>
     <String>53</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>prices</String>
     <String>54</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>prices</String>
     <String>55</String>
     <String>1</String>
-    <String>Temp</String>
+    <String>prices</String>
     <String>56</String>
     <String>1</String>
-    <String>Temp</String>
+    <String>slots</String>
     <String>57</String>
     <String>1</String>
-    <String>prices</String>
-    <String>58</String>
-    <String>1</String>
-    <String>prices</String>
-    <String>59</String>
-    <String>1</String>
-    <String>prices</String>
-    <String>60</String>
-    <String>1</String>
-    <String>prices</String>
-    <String>61</String>
-    <String>1</String>
-    <String>prices</String>
-    <String>62</String>
-    <String>1</String>
-    <String>prices</String>
-    <String>63</String>
-    <String>1</String>
-    <String>prices</String>
-    <String>64</String>
-    <String>1</String>
-    <String>prices</String>
+    <String>slots</String>
   </FieldSrcTables>
   <TableViewData>
     <Pos></Pos>
@@ -202,57 +182,66 @@
         <Tables>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>705</Left>
-              <Top>413</Top>
-              <Width>242</Width>
-              <Height>241</Height>
+              <Left>491</Left>
+              <Top>454</Top>
+              <Width>249</Width>
+              <Height>220</Height>
             </Pos>
             <Caption>accounts</Caption>
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>62</Left>
-              <Top>96</Top>
-              <Width>375</Width>
-              <Height>241</Height>
-            </Pos>
-            <Caption>accounts-ExpandedNodes</Caption>
-          </TableViewTableWinSaveInfo>
-          <TableViewTableWinSaveInfo>
-            <Pos>
-              <Left>1041</Left>
-              <Top>414</Top>
-              <Width>211</Width>
-              <Height>241</Height>
-            </Pos>
-            <Caption>splits</Caption>
-          </TableViewTableWinSaveInfo>
-          <TableViewTableWinSaveInfo>
-            <Pos>
-              <Left>1424</Left>
-              <Top>495</Top>
-              <Width>188</Width>
-              <Height>157</Height>
-            </Pos>
-            <Caption>transactions</Caption>
-          </TableViewTableWinSaveInfo>
-          <TableViewTableWinSaveInfo>
-            <Pos>
-              <Left>305</Left>
-              <Top>415</Top>
-              <Width>298</Width>
+              <Left>466</Left>
+              <Top>165</Top>
+              <Width>248</Width>
               <Height>241</Height>
             </Pos>
             <Caption>acc_hierarchy</Caption>
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>1315</Left>
-              <Top>249</Top>
-              <Width>300</Width>
-              <Height>220</Height>
+              <Left>886</Left>
+              <Top>149</Top>
+              <Width>216</Width>
+              <Height>157</Height>
             </Pos>
             <Caption>commodities</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>861</Left>
+              <Top>412</Top>
+              <Width>209</Width>
+              <Height>241</Height>
+            </Pos>
+            <Caption>splits</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>1183</Left>
+              <Top>446</Top>
+              <Width>220</Width>
+              <Height>199</Height>
+            </Pos>
+            <Caption>transactions</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>1263</Left>
+              <Top>142</Top>
+              <Width>192</Width>
+              <Height>220</Height>
+            </Pos>
+            <Caption>prices</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>998</Left>
+              <Top>668</Top>
+              <Width>142</Width>
+              <Height>94</Height>
+            </Pos>
+            <Caption>slots</Caption>
           </TableViewTableWinSaveInfo>
         </Tables>
         <BroomPoints></BroomPoints>
@@ -274,7 +263,6 @@
           <String>$Field</String>
           <String>$Table</String>
           <String>%AccountGuid</String>
-          <String>#AccountName</String>
           <String>%CommodityGuid</String>
           <String>%TxGuid</String>
         </FieldNames>
@@ -308,26 +296,22 @@
           <String>$Table</String>
           <String>$Info</String>
           <String>%AccountGuid</String>
-          <String>#AccountName</String>
+          <String>accounts.name</String>
           <String>accounts.account_type</String>
           <String>accounts.commodityGuid</String>
           <String>accounts.parent_guid</String>
-          <String>accounts.code</String>
-          <String>%ChildAccountGuid</String>
-          <String>%ParentAccountGuid</String>
-          <String>acc_hierarchy.#AccountName1</String>
-          <String>acc_hierarchy.#AccountName2</String>
-          <String>acc_hierarchy.#AccountName3</String>
-          <String>acc_hierarchy.#AccountName4</String>
-          <String>acc_hierarchy.#AccountName5</String>
+          <String>AccountName</String>
+          <String>ParentGuid</String>
+          <String>acc_hierarchy.AccountName1</String>
+          <String>acc_hierarchy.AccountName2</String>
+          <String>acc_hierarchy.AccountName3</String>
+          <String>acc_hierarchy.AccountName4</String>
           <String>acc_hierarchy.ParentName</String>
           <String>acc_hierarchy.PathName</String>
           <String>%CommodityGuid</String>
           <String>commodities.namespace</String>
           <String>commodities.mnemonic</String>
           <String>commodities.fullname</String>
-          <String>commodities.quoteSource</String>
-          <String>commodities.quoteTz</String>
           <String>splits.guid</String>
           <String>%TxGuid</String>
           <String>splits.memo</String>
@@ -337,6 +321,7 @@
           <String>prices.currencyGuid</String>
           <String>prices.source</String>
           <String>prices.type</String>
+          <String>slots.name</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -346,26 +331,22 @@
           <String>$Table</String>
           <String>$Info</String>
           <String>%AccountGuid</String>
-          <String>#AccountName</String>
+          <String>accounts.name</String>
           <String>accounts.account_type</String>
           <String>accounts.commodityGuid</String>
           <String>accounts.parent_guid</String>
-          <String>accounts.code</String>
-          <String>%ChildAccountGuid</String>
-          <String>%ParentAccountGuid</String>
-          <String>acc_hierarchy.#AccountName1</String>
-          <String>acc_hierarchy.#AccountName2</String>
-          <String>acc_hierarchy.#AccountName3</String>
-          <String>acc_hierarchy.#AccountName4</String>
-          <String>acc_hierarchy.#AccountName5</String>
+          <String>AccountName</String>
+          <String>ParentGuid</String>
+          <String>acc_hierarchy.AccountName1</String>
+          <String>acc_hierarchy.AccountName2</String>
+          <String>acc_hierarchy.AccountName3</String>
+          <String>acc_hierarchy.AccountName4</String>
           <String>acc_hierarchy.ParentName</String>
           <String>acc_hierarchy.PathName</String>
           <String>%CommodityGuid</String>
           <String>commodities.namespace</String>
           <String>commodities.mnemonic</String>
           <String>commodities.fullname</String>
-          <String>commodities.quoteSource</String>
-          <String>commodities.quoteTz</String>
           <String>splits.guid</String>
           <String>%TxGuid</String>
           <String>splits.memo</String>
@@ -375,6 +356,7 @@
           <String>prices.currencyGuid</String>
           <String>prices.source</String>
           <String>prices.type</String>
+          <String>slots.name</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -384,12 +366,10 @@
           <String>$Fields</String>
           <String>$FieldNo</String>
           <String>accounts.commodityScu</String>
-          <String>accounts.nonStdScu</String>
           <String>accounts.hidden</String>
           <String>accounts.placeholder</String>
           <String>acc_hierarchy.Depth</String>
           <String>commodities.fraction</String>
-          <String>commodities.quoteFlag</String>
           <String>splits.reconcileDate</String>
           <String>splits.valueNum</String>
           <String>splits.valueDenom</String>
@@ -401,8 +381,6 @@
           <String>transactions.Year</String>
           <String>transactions.Month</String>
           <String>transactions.enterDate</String>
-          <String>Temp.MinDate</String>
-          <String>Temp.MaxDate</String>
           <String>prices.date</String>
           <String>prices.valueNum</String>
           <String>prices.valueDenom</String>
@@ -416,18 +394,20 @@
           <String>$Fields</String>
           <String>$FieldNo</String>
           <String>accounts.commodityScu</String>
-          <String>accounts.nonStdScu</String>
           <String>accounts.hidden</String>
           <String>accounts.placeholder</String>
           <String>acc_hierarchy.Depth</String>
           <String>commodities.fraction</String>
-          <String>commodities.quoteFlag</String>
+          <String>splits.reconcileDate</String>
           <String>splits.valueNum</String>
           <String>splits.valueDenom</String>
           <String>splits.quantityNum</String>
           <String>splits.quantityDenom</String>
+          <String>transactions.postDate</String>
           <String>transactions.Year</String>
           <String>transactions.Month</String>
+          <String>transactions.enterDate</String>
+          <String>prices.date</String>
           <String>prices.valueNum</String>
           <String>prices.valueDenom</String>
         </FieldNames>
@@ -437,8 +417,14 @@
         <FieldNames>
           <String>transactions.postDate</String>
           <String>transactions.enterDate</String>
-          <String>Temp.MinDate</String>
-          <String>Temp.MaxDate</String>
+          <String>prices.date</String>
+        </FieldNames>
+      </FieldTagData>
+      <FieldTagData>
+        <Tag>$date</Tag>
+        <FieldNames>
+          <String>transactions.postDate</String>
+          <String>transactions.enterDate</String>
           <String>prices.date</String>
         </FieldNames>
       </FieldTagData>

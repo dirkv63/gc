@@ -2,13 +2,13 @@
   <ZoomFactor>3FF0000000000000</ZoomFactor>
   <SheetFont>
     <FontName>Tahoma</FontName>
-    <PointSize1000>8000</PointSize1000>
+    <PointSize1000>12000</PointSize1000>
     <Underline>false</Underline>
     <Bold>false</Bold>
     <Italic>false</Italic>
     <DropShadow>false</DropShadow>
   </SheetFont>
-  <Name>Overview</Name>
+  <Name>Sheet</Name>
   <UseApplicationBkg>true</UseApplicationBkg>
   <UseBkgImage>false</UseBkgImage>
   <UseColorBkg>false</UseColorBkg>
@@ -48,7 +48,12 @@
     <AccessSheetObjectProperties>true</AccessSheetObjectProperties>
     <AccessSheetProperties>true</AccessSheetProperties>
   </UserPermissions>
-  <Show></Show>
+  <Show>
+    <Always>false</Always>
+    <Expression>
+      <v>0</v>
+    </Expression>
+  </Show>
   <ReadOnly>false</ReadOnly>
   <ColorMap></ColorMap>
   <TabAttr>

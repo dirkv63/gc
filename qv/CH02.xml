@@ -47,7 +47,7 @@
         <DropShadow>false</DropShadow>
       </CaptionFont>
       <Name>
-        <v>In</v>
+        <v>Uit</v>
       </Name>
       <Detached>false</Detached>
       <AllowMinimize>true</AllowMinimize>
@@ -217,7 +217,7 @@
     <ReadOnly>false</ReadOnly>
     <FastChange></FastChange>
     <WindowTitle>
-      <v>In</v>
+      <v>Uit</v>
     </WindowTitle>
     <GraphMode>GRAPH_MODE_STRAIGHTTABLE</GraphMode>
     <TotalString></TotalString>
@@ -227,7 +227,7 @@
   <_ExpressionDatas>
     <ExpressionData>
       <Definition>
-        <v>$(vIncome)</v>
+        <v>$(vExpense)</v>
       </Definition>
       <Enable>true</Enable>
       <Present>false</Present>
@@ -900,7 +900,7 @@
       <PageBreaks>NO_BREAKS</PageBreaks>
       <MaxNumShown></MaxNumShown>
       <Spacing></Spacing>
-      <ColWidth>303</ColWidth>
+      <ColWidth>434</ColWidth>
       <OverrideGroupSort>false</OverrideGroupSort>
       <Show></Show>
       <EnableCondition></EnableCondition>
@@ -1086,7 +1086,7 @@
       <PageBreaks>NO_BREAKS</PageBreaks>
       <MaxNumShown></MaxNumShown>
       <Spacing></Spacing>
-      <ColWidth>528</ColWidth>
+      <ColWidth>584</ColWidth>
       <OverrideGroupSort>false</OverrideGroupSort>
       <Show></Show>
       <EnableCondition></EnableCondition>
@@ -2270,8 +2270,8 @@
   <TableProperties>
     <VerticalLabels>false</VerticalLabels>
     <ColWidths>
-      <int>303</int>
-      <int>528</int>
+      <int>434</int>
+      <int>584</int>
       <int>272</int>
     </ColWidths>
     <Striping>
@@ -2829,7 +2829,7 @@
           <InternalId>-1</InternalId>
           <ExpressionData>
             <Definition>
-              <v>$(vIncome)</v>
+              <v>$(vExpense)</v>
             </Definition>
             <Enable>true</Enable>
             <Present>false</Present>

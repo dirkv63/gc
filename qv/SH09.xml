@@ -2,13 +2,13 @@
   <ZoomFactor>3FF0000000000000</ZoomFactor>
   <SheetFont>
     <FontName>Tahoma</FontName>
-    <PointSize1000>8000</PointSize1000>
+    <PointSize1000>12000</PointSize1000>
     <Underline>false</Underline>
     <Bold>false</Bold>
     <Italic>false</Italic>
     <DropShadow>false</DropShadow>
   </SheetFont>
-  <Name>Overview</Name>
+  <Name>Vorticc Maandrapport</Name>
   <UseApplicationBkg>true</UseApplicationBkg>
   <UseBkgImage>false</UseBkgImage>
   <UseColorBkg>false</UseColorBkg>
