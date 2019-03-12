@@ -42,7 +42,7 @@ accounts:
 LOAD guid as %AccountGuid,
     name,
     "account_type",
-    "commodity_guid" as commodityGuid,
+    "commodity_guid" as %CommodityGuid,
     "commodity_scu" as commodityScu,
 //    "non_std_scu" as nonStdScu,
     "parent_guid",
@@ -96,7 +96,7 @@ FROM splits;
 ///$tab transactions
 transactions:
 LOAD guid as %TxGuid,
-    "currency_guid" as %CommodityGuid,
+    "currency_guid" as currencyGuid,
     num,
     $(fDate("post_date")) as postDate,
     Year("post_date") as Year,

@@ -182,8 +182,8 @@
         <Tables>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>491</Left>
-              <Top>454</Top>
+              <Left>699</Left>
+              <Top>473</Top>
               <Width>249</Width>
               <Height>220</Height>
             </Pos>
@@ -191,8 +191,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>466</Left>
-              <Top>165</Top>
+              <Left>701</Left>
+              <Top>212</Top>
               <Width>248</Width>
               <Height>241</Height>
             </Pos>
@@ -200,8 +200,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>886</Left>
-              <Top>149</Top>
+              <Left>414</Left>
+              <Top>291</Top>
               <Width>216</Width>
               <Height>157</Height>
             </Pos>
@@ -209,8 +209,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>861</Left>
-              <Top>412</Top>
+              <Left>1021</Left>
+              <Top>452</Top>
               <Width>209</Width>
               <Height>241</Height>
             </Pos>
@@ -218,8 +218,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>1183</Left>
-              <Top>446</Top>
+              <Left>1287</Left>
+              <Top>344</Top>
               <Width>220</Width>
               <Height>199</Height>
             </Pos>
@@ -227,8 +227,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>1263</Left>
-              <Top>142</Top>
+              <Left>417</Left>
+              <Top>456</Top>
               <Width>192</Width>
               <Height>220</Height>
             </Pos>
@@ -236,8 +236,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>998</Left>
-              <Top>668</Top>
+              <Left>1063</Left>
+              <Top>342</Top>
               <Width>142</Width>
               <Height>94</Height>
             </Pos>
@@ -298,7 +298,7 @@
           <String>%AccountGuid</String>
           <String>accounts.name</String>
           <String>accounts.account_type</String>
-          <String>accounts.commodityGuid</String>
+          <String>%CommodityGuid</String>
           <String>accounts.parent_guid</String>
           <String>AccountName</String>
           <String>ParentGuid</String>
@@ -308,7 +308,6 @@
           <String>acc_hierarchy.AccountName4</String>
           <String>acc_hierarchy.ParentName</String>
           <String>acc_hierarchy.PathName</String>
-          <String>%CommodityGuid</String>
           <String>commodities.namespace</String>
           <String>commodities.mnemonic</String>
           <String>commodities.fullname</String>
@@ -317,6 +316,7 @@
           <String>splits.memo</String>
           <String>splits.action</String>
           <String>splits.reconcileState</String>
+          <String>transactions.currencyGuid</String>
           <String>prices.guid</String>
           <String>prices.currencyGuid</String>
           <String>prices.source</String>
@@ -333,7 +333,7 @@
           <String>%AccountGuid</String>
           <String>accounts.name</String>
           <String>accounts.account_type</String>
-          <String>accounts.commodityGuid</String>
+          <String>%CommodityGuid</String>
           <String>accounts.parent_guid</String>
           <String>AccountName</String>
           <String>ParentGuid</String>
@@ -343,7 +343,6 @@
           <String>acc_hierarchy.AccountName4</String>
           <String>acc_hierarchy.ParentName</String>
           <String>acc_hierarchy.PathName</String>
-          <String>%CommodityGuid</String>
           <String>commodities.namespace</String>
           <String>commodities.mnemonic</String>
           <String>commodities.fullname</String>
@@ -352,6 +351,7 @@
           <String>splits.memo</String>
           <String>splits.action</String>
           <String>splits.reconcileState</String>
+          <String>transactions.currencyGuid</String>
           <String>prices.guid</String>
           <String>prices.currencyGuid</String>
           <String>prices.source</String>

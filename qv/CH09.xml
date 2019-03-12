@@ -621,7 +621,7 @@
           <Alpha>255</Alpha>
         </TestTubeColor>
       </GaugeSettings>
-      <ColWidth>169</ColWidth>
+      <ColWidth>213</ColWidth>
       <ShowAsPopup>false</ShowAsPopup>
       <Searchable>false</Searchable>
       <LineMode>LINEMODE_STRAIGHT</LineMode>
@@ -2645,8 +2645,8 @@
       <int>459</int>
       <int>350</int>
       <int>244</int>
-      <int>147</int>
-      <int>169</int>
+      <int>625</int>
+      <int>213</int>
     </ColWidths>
     <Striping>
       <int>1</int>
