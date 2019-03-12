@@ -3,6 +3,7 @@ This library consolidates gnucash specific functions.
 """
 import datetime
 
+
 def add_result_to_xl(xl_arr, res):
     """
     This function will get the result dictionary as prepared by handle_account and convert this to an array of
@@ -11,9 +12,7 @@ def add_result_to_xl(xl_arr, res):
     A summary line will be added to each subcategory and category.
 
     :param xl_arr: Output array with a dictionary line per output line.
-
     :param res:
-
     :return:
     """
     prev_cat = ""
@@ -61,15 +60,10 @@ def handle_account(start, end, results, acc, lbl=None):
     This function will calculate the sum of transactions in an account and all sub-accounts during a period of time.
 
     :param start: First day YYYY-MM-DD for accounting
-
     :param end: Last day YYYY-MM-DD for accounting
-
     :param results: Dictionary with key full account name and value total amount for this period.
-
     :param acc: Account name
-
     :param lbl: Account name prefix. Full account name is lbl:acc
-
     :return:
     """
     splits = [split.value for split in acc.splits
@@ -86,21 +80,18 @@ def handle_account(start, end, results, acc, lbl=None):
         handle_account(start, end, results, child, lbl)
     return
 
+
 def summary(out_arr, lbl, res_arr=None, total=None):
     """
     This function will add a summary line to the result excel. A summary line can be for subcategory, category, all
     categories and document
 
     :param out_arr:
-
     :param lbl: If label has ':' (category separator), then output is for subcategory. If label is 'Report', then
     output is for Overall Report. If label is 'Categories' then output is for category group in the report. Otherwise
     output is for the Category. For Report the total sum needs to be provided, otherwise it will be calculated.
-
     :param res_arr: Result of the  handle_account function. Required for Category and Subcategory
-
     :param total: Sum of the accounts for this category. This needs to be provided for Report and for Categories.
-
     :return:
     """
     out_dic = dict(Categorie="", Subcategorie="", Detail="", Bedrag="", Totaal="")
