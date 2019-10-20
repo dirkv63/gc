@@ -218,7 +218,7 @@
     <NumAdjust>2</NumAdjust>
     <TextAdjust>0</TextAdjust>
     <MultiLine>0</MultiLine>
-    <ShowFrequency>false</ShowFrequency>
+    <ShowFrequency>true</ShowFrequency>
     <FrequencyInPercent>false</FrequencyInPercent>
     <Longest></Longest>
     <Borders>
@@ -252,7 +252,7 @@
     <CurrentInfoURL></CurrentInfoURL>
     <SuppressSearchHighlight>false</SuppressSearchHighlight>
     <TextColor></TextColor>
-    <PreferredTextSearchMode>TEXT_SEARCH_NONE</PreferredTextSearchMode>
+    <PreferredTextSearchMode>TEXT_SEARCH_NORMAL</PreferredTextSearchMode>
     <CellBorders>false</CellBorders>
   </Layout>
   <Def>

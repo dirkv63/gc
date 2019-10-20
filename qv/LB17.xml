@@ -1,10 +1,5 @@
-﻿<MultiBoxProperties>
+﻿<ListBoxProperties>
   <Layout>
-    <NoOfRows>4</NoOfRows>
-    <MaxNoOfRowsDropDown>10</MaxNoOfRowsDropDown>
-    <ColWidthLabel>300</ColWidthLabel>
-    <ColWidthDrop>42</ColWidthDrop>
-    <ColWidthData>756</ColWidthData>
     <Frame>
       <BorderWidth>4</BorderWidth>
       <BorderEffect>FLAT</BorderEffect>
@@ -51,7 +46,9 @@
         <Italic>false</Italic>
         <DropShadow>false</DropShadow>
       </CaptionFont>
-      <Name></Name>
+      <Name>
+        <v>Comm.Namespace</v>
+      </Name>
       <Detached>false</Detached>
       <AllowMinimize>false</AllowMinimize>
       <AutoMinimize>false</AutoMinimize>
@@ -60,7 +57,7 @@
       <PrintIcon>false</PrintIcon>
       <CopyIcon>false</CopyIcon>
       <XLIcon>false</XLIcon>
-      <SearchIcon>false</SearchIcon>
+      <SearchIcon>true</SearchIcon>
       <SelectPossibleIcon>false</SelectPossibleIcon>
       <SelectExcludedIcon>false</SelectExcludedIcon>
       <SelectAllIcon>false</SelectAllIcon>
@@ -218,40 +215,56 @@
       <StateName></StateName>
     </Frame>
     <ReadOnly>false</ReadOnly>
-    <GridStyle>false</GridStyle>
-    <DropDownLimit>false</DropDownLimit>
-    <ClosedColor>
-      <Mode>COLORAREA_DOUBLE_COLORS</Mode>
-      <Luminosity>85</Luminosity>
-      <FillDirection>COLORAREA_HORZ</FillDirection>
-      <FillPattern>COLORAREA_PATTERN2</FillPattern>
-      <PrimaryCol>
-        <Col>
-          <Red>248</Red>
-          <Green>248</Green>
-          <Blue>248</Blue>
-          <Alpha>255</Alpha>
-        </Col>
-        <IsCalculated>false</IsCalculated>
-        <ColorExpr></ColorExpr>
-      </PrimaryCol>
-      <SecondaryCol>
-        <Col>
-          <Red>235</Red>
-          <Green>235</Green>
-          <Blue>235</Blue>
-          <Alpha>255</Alpha>
-        </Col>
-        <IsCalculated>false</IsCalculated>
-        <ColorExpr></ColorExpr>
-      </SecondaryCol>
-      <Alpha>255</Alpha>
-    </ClosedColor>
-    <Style>MULTIBOXSTYLE_LIGHT</Style>
+    <NumAdjust>2</NumAdjust>
+    <TextAdjust>0</TextAdjust>
+    <MultiLine>0</MultiLine>
+    <ShowFrequency>true</ShowFrequency>
+    <FrequencyInPercent>false</FrequencyInPercent>
+    <Longest></Longest>
+    <Borders>
+      <Top></Top>
+      <Bottom></Bottom>
+      <Left>
+        <LineStyle>32</LineStyle>
+        <Color></Color>
+        <ExtraBorderSpace16>0</ExtraBorderSpace16>
+      </Left>
+      <Right>
+        <LineStyle>32</LineStyle>
+        <Color></Color>
+        <ExtraBorderSpace16>0</ExtraBorderSpace16>
+      </Right>
+    </Borders>
+    <MultiColumn>false</MultiColumn>
+    <OrderByRow>false</OrderByRow>
+    <HideExcluded>false</HideExcluded>
+    <SelectionStyle>SS_USER_PREF</SelectionStyle>
+    <ImageRepresentation></ImageRepresentation>
+    <SoftLock>false</SoftLock>
+    <ExcludedValuesMode>0</ExcludedValuesMode>
+    <DefaultSearchMode>0</DefaultSearchMode>
+    <SuppressHorizontalScroll>false</SuppressHorizontalScroll>
+    <FixedColumnsCount>-1</FixedColumnsCount>
+    <LayoutDependentPrint>true</LayoutDependentPrint>
+    <PrintAllValues>false</PrintAllValues>
+    <HierarchySeparator>/</HierarchySeparator>
+    <ShowAsTreeView>false</ShowAsTreeView>
+    <CurrentInfoURL></CurrentInfoURL>
+    <SuppressSearchHighlight>false</SuppressSearchHighlight>
+    <TextColor></TextColor>
+    <PreferredTextSearchMode>TEXT_SEARCH_NORMAL</PreferredTextSearchMode>
+    <CellBorders>false</CellBorders>
   </Layout>
+  <Def>
+    <Name>commodities.namespace</Name>
+    <Type>PRESENT</Type>
+  </Def>
+  <Title>
+    <v>Comm.Namespace</v>
+  </Title>
   <PrintSettings>
     <Landscape>true</Landscape>
-    <PrintCurrentSelectionPosition>BOTTOM_OF_LAST_PAGE</PrintCurrentSelectionPosition>
+    <PrintCurrentSelectionPosition>NO_SELECTION</PrintCurrentSelectionPosition>
     <ShowTimeStamp>true</ShowTimeStamp>
     <ShowWindowTitle>true</ShowWindowTitle>
     <MarginLeft>236</MarginLeft>
@@ -338,167 +351,22 @@
     <SheetPrintDrawBackGround>false</SheetPrintDrawBackGround>
     <StrDevModeExtra></StrDevModeExtra>
   </PrintSettings>
-  <TextAdjust>0</TextAdjust>
-  <NumAdjust>2</NumAdjust>
-  <SortByApplicability>false</SortByApplicability>
-  <MemberAttributes>
-    <MultiBoxMemberAttributes>
-      <Label>
-        <v>Level 1</v>
-      </Label>
-      <FieldDef>
-        <Name>acc_hierarchy.AccountName1</Name>
-        <Type>PRESENT</Type>
-      </FieldDef>
-      <SortCriteria>
-        <SortByState>1</SortByState>
-        <SortByFrequency>0</SortByFrequency>
-        <SortByNumeric>0</SortByNumeric>
-        <SortByAscii>1</SortByAscii>
-        <SortByLoadOrder>0</SortByLoadOrder>
-        <SortByExpression>0</SortByExpression>
-        <Expression></Expression>
-        <SortByGreyness>0</SortByGreyness>
-      </SortCriteria>
-      <ShowFrequency>false</ShowFrequency>
-      <FrequencyInPercent>false</FrequencyInPercent>
-      <HideExcluded>false</HideExcluded>
-      <ReadOnly>false</ReadOnly>
-      <IgnoreNull>false</IgnoreNull>
-      <NumAdjust>2</NumAdjust>
-      <TextAdjust>0</TextAdjust>
-      <MultiColumn>false</MultiColumn>
-      <OrderByRow>false</OrderByRow>
-      <MultiLine>0</MultiLine>
-      <ShowBorder>true</ShowBorder>
-      <SelectionStyle>SS_USER_PREF</SelectionStyle>
-      <ImageRepresentation></ImageRepresentation>
-      <SoftLock>false</SoftLock>
-      <ExcludedValuesMode>0</ExcludedValuesMode>
-      <DefaultSearchMode>0</DefaultSearchMode>
-      <NumberPresentation></NumberPresentation>
-      <SuppressHorizontalScroll>false</SuppressHorizontalScroll>
-      <SuppressAutoSortByState>false</SuppressAutoSortByState>
-      <PreferredTextSearchMode>TEXT_SEARCH_NONE</PreferredTextSearchMode>
-    </MultiBoxMemberAttributes>
-    <MultiBoxMemberAttributes>
-      <Label>
-        <v>Level 2</v>
-      </Label>
-      <FieldDef>
-        <Name>acc_hierarchy.AccountName2</Name>
-        <Type>PRESENT</Type>
-      </FieldDef>
-      <SortCriteria>
-        <SortByState>1</SortByState>
-        <SortByFrequency>0</SortByFrequency>
-        <SortByNumeric>0</SortByNumeric>
-        <SortByAscii>1</SortByAscii>
-        <SortByLoadOrder>0</SortByLoadOrder>
-        <SortByExpression>0</SortByExpression>
-        <Expression></Expression>
-        <SortByGreyness>0</SortByGreyness>
-      </SortCriteria>
-      <ShowFrequency>false</ShowFrequency>
-      <FrequencyInPercent>false</FrequencyInPercent>
-      <HideExcluded>false</HideExcluded>
-      <ReadOnly>false</ReadOnly>
-      <IgnoreNull>false</IgnoreNull>
-      <NumAdjust>2</NumAdjust>
-      <TextAdjust>0</TextAdjust>
-      <MultiColumn>false</MultiColumn>
-      <OrderByRow>false</OrderByRow>
-      <MultiLine>0</MultiLine>
-      <ShowBorder>true</ShowBorder>
-      <SelectionStyle>SS_USER_PREF</SelectionStyle>
-      <ImageRepresentation></ImageRepresentation>
-      <SoftLock>false</SoftLock>
-      <ExcludedValuesMode>0</ExcludedValuesMode>
-      <DefaultSearchMode>0</DefaultSearchMode>
-      <NumberPresentation></NumberPresentation>
-      <SuppressHorizontalScroll>false</SuppressHorizontalScroll>
-      <SuppressAutoSortByState>false</SuppressAutoSortByState>
-      <PreferredTextSearchMode>TEXT_SEARCH_NONE</PreferredTextSearchMode>
-    </MultiBoxMemberAttributes>
-    <MultiBoxMemberAttributes>
-      <Label>
-        <v>Level 3</v>
-      </Label>
-      <FieldDef>
-        <Name>acc_hierarchy.AccountName3</Name>
-        <Type>PRESENT</Type>
-      </FieldDef>
-      <SortCriteria>
-        <SortByState>1</SortByState>
-        <SortByFrequency>0</SortByFrequency>
-        <SortByNumeric>0</SortByNumeric>
-        <SortByAscii>1</SortByAscii>
-        <SortByLoadOrder>0</SortByLoadOrder>
-        <SortByExpression>0</SortByExpression>
-        <Expression></Expression>
-        <SortByGreyness>0</SortByGreyness>
-      </SortCriteria>
-      <ShowFrequency>false</ShowFrequency>
-      <FrequencyInPercent>false</FrequencyInPercent>
-      <HideExcluded>false</HideExcluded>
-      <ReadOnly>false</ReadOnly>
-      <IgnoreNull>false</IgnoreNull>
-      <NumAdjust>2</NumAdjust>
-      <TextAdjust>0</TextAdjust>
-      <MultiColumn>false</MultiColumn>
-      <OrderByRow>false</OrderByRow>
-      <MultiLine>0</MultiLine>
-      <ShowBorder>true</ShowBorder>
-      <SelectionStyle>SS_USER_PREF</SelectionStyle>
-      <ImageRepresentation></ImageRepresentation>
-      <SoftLock>false</SoftLock>
-      <ExcludedValuesMode>0</ExcludedValuesMode>
-      <DefaultSearchMode>0</DefaultSearchMode>
-      <NumberPresentation></NumberPresentation>
-      <SuppressHorizontalScroll>false</SuppressHorizontalScroll>
-      <SuppressAutoSortByState>false</SuppressAutoSortByState>
-      <PreferredTextSearchMode>TEXT_SEARCH_NONE</PreferredTextSearchMode>
-    </MultiBoxMemberAttributes>
-    <MultiBoxMemberAttributes>
-      <Label>
-        <v>Level 4</v>
-      </Label>
-      <FieldDef>
-        <Name>acc_hierarchy.AccountName4</Name>
-        <Type>PRESENT</Type>
-      </FieldDef>
-      <SortCriteria>
-        <SortByState>1</SortByState>
-        <SortByFrequency>0</SortByFrequency>
-        <SortByNumeric>0</SortByNumeric>
-        <SortByAscii>1</SortByAscii>
-        <SortByLoadOrder>0</SortByLoadOrder>
-        <SortByExpression>0</SortByExpression>
-        <Expression></Expression>
-        <SortByGreyness>0</SortByGreyness>
-      </SortCriteria>
-      <ShowFrequency>false</ShowFrequency>
-      <FrequencyInPercent>false</FrequencyInPercent>
-      <HideExcluded>false</HideExcluded>
-      <ReadOnly>false</ReadOnly>
-      <IgnoreNull>false</IgnoreNull>
-      <NumAdjust>2</NumAdjust>
-      <TextAdjust>0</TextAdjust>
-      <MultiColumn>false</MultiColumn>
-      <OrderByRow>false</OrderByRow>
-      <MultiLine>0</MultiLine>
-      <ShowBorder>true</ShowBorder>
-      <SelectionStyle>SS_USER_PREF</SelectionStyle>
-      <ImageRepresentation></ImageRepresentation>
-      <SoftLock>false</SoftLock>
-      <ExcludedValuesMode>0</ExcludedValuesMode>
-      <DefaultSearchMode>0</DefaultSearchMode>
-      <NumberPresentation></NumberPresentation>
-      <SuppressHorizontalScroll>false</SuppressHorizontalScroll>
-      <SuppressAutoSortByState>false</SuppressAutoSortByState>
-      <PreferredTextSearchMode>TEXT_SEARCH_NONE</PreferredTextSearchMode>
-    </MultiBoxMemberAttributes>
-  </MemberAttributes>
+  <SortCriteria>
+    <SortByState>1</SortByState>
+    <SortByFrequency>0</SortByFrequency>
+    <SortByNumeric>0</SortByNumeric>
+    <SortByAscii>1</SortByAscii>
+    <SortByLoadOrder>0</SortByLoadOrder>
+    <SortByExpression>0</SortByExpression>
+    <Expression></Expression>
+    <SortByGreyness>0</SortByGreyness>
+  </SortCriteria>
+  <NumberPresentation></NumberPresentation>
+  <ExpandedNodes></ExpandedNodes>
   <OnSelectActionItems></OnSelectActionItems>
-  <PreferredTextSearchMode>TEXT_SEARCH_NONE</PreferredTextSearchMode>
-</MultiBoxProperties>
+  <SuppressAutoSortByState>false</SuppressAutoSortByState>
+  <Expressions></Expressions>
+  <NullSymbol>-</NullSymbol>
+  <MissingSymbol>-</MissingSymbol>
+  <MoreSearchSettings></MoreSearchSettings>
+</ListBoxProperties>

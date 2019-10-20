@@ -10,16 +10,20 @@
     <bool>false</bool>
     <bool>false</bool>
     <bool>false</bool>
+    <bool>false</bool>
+    <bool>false</bool>
+    <bool>false</bool>
   </AlwaysLoose>
   <FieldSrcTables>
     <String>6</String>
-    <String>3</String>
+    <String>1</String>
+    <String>accounts</String>
+    <String>7</String>
+    <String>4</String>
     <String>accounts</String>
     <String>acc_hierarchy</String>
     <String>splits</String>
-    <String>7</String>
-    <String>1</String>
-    <String>accounts</String>
+    <String>txaccounts</String>
     <String>8</String>
     <String>1</String>
     <String>accounts</String>
@@ -30,8 +34,10 @@
     <String>1</String>
     <String>accounts</String>
     <String>11</String>
-    <String>1</String>
+    <String>3</String>
     <String>accounts</String>
+    <String>commodities</String>
+    <String>prices</String>
     <String>12</String>
     <String>1</String>
     <String>accounts</String>
@@ -43,10 +49,10 @@
     <String>accounts</String>
     <String>15</String>
     <String>1</String>
-    <String>acc_hierarchy</String>
+    <String>accounts</String>
     <String>16</String>
     <String>1</String>
-    <String>acc_hierarchy</String>
+    <String>accounts</String>
     <String>17</String>
     <String>1</String>
     <String>acc_hierarchy</String>
@@ -69,13 +75,11 @@
     <String>1</String>
     <String>acc_hierarchy</String>
     <String>24</String>
-    <String>3</String>
-    <String>commodities</String>
-    <String>transactions</String>
-    <String>prices</String>
+    <String>1</String>
+    <String>acc_hierarchy</String>
     <String>25</String>
     <String>1</String>
-    <String>commodities</String>
+    <String>acc_hierarchy</String>
     <String>26</String>
     <String>1</String>
     <String>commodities</String>
@@ -90,18 +94,19 @@
     <String>commodities</String>
     <String>30</String>
     <String>1</String>
-    <String>splits</String>
+    <String>commodities</String>
     <String>31</String>
-    <String>3</String>
+    <String>1</String>
     <String>splits</String>
-    <String>transactions</String>
-    <String>slots</String>
     <String>32</String>
     <String>1</String>
     <String>splits</String>
     <String>33</String>
-    <String>1</String>
+    <String>4</String>
     <String>splits</String>
+    <String>transactions</String>
+    <String>txaccsplit</String>
+    <String>slots</String>
     <String>34</String>
     <String>1</String>
     <String>splits</String>
@@ -128,13 +133,13 @@
     <String>splits</String>
     <String>42</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>splits</String>
     <String>43</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>splits</String>
     <String>44</String>
     <String>1</String>
-    <String>transactions</String>
+    <String>splits</String>
     <String>45</String>
     <String>1</String>
     <String>transactions</String>
@@ -146,32 +151,149 @@
     <String>transactions</String>
     <String>48</String>
     <String>1</String>
-    <String>prices</String>
+    <String>transactions</String>
     <String>49</String>
     <String>1</String>
-    <String>prices</String>
+    <String>transactions</String>
     <String>50</String>
     <String>1</String>
-    <String>prices</String>
+    <String>transactions</String>
     <String>51</String>
     <String>1</String>
-    <String>prices</String>
+    <String>transactions</String>
     <String>52</String>
     <String>1</String>
-    <String>prices</String>
+    <String>transactions</String>
     <String>53</String>
     <String>1</String>
-    <String>prices</String>
+    <String>txaccounts</String>
     <String>54</String>
     <String>1</String>
-    <String>prices</String>
+    <String>txaccounts</String>
     <String>55</String>
     <String>1</String>
-    <String>prices</String>
+    <String>txaccounts</String>
     <String>56</String>
     <String>1</String>
-    <String>slots</String>
+    <String>txaccounts</String>
     <String>57</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>58</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>59</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>60</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>61</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>62</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>63</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>64</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>65</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>66</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>67</String>
+    <String>1</String>
+    <String>txaccounts</String>
+    <String>68</String>
+    <String>1</String>
+    <String>txaccsplit</String>
+    <String>69</String>
+    <String>1</String>
+    <String>txaccsplit</String>
+    <String>70</String>
+    <String>1</String>
+    <String>txaccsplit</String>
+    <String>71</String>
+    <String>1</String>
+    <String>txaccsplit</String>
+    <String>72</String>
+    <String>1</String>
+    <String>txaccsplit</String>
+    <String>73</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>74</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>75</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>76</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>77</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>78</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>79</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>80</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>81</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>82</String>
+    <String>1</String>
+    <String>prices</String>
+    <String>83</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>84</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>85</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>86</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>87</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>88</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>89</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>90</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>91</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>92</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>93</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>94</String>
+    <String>1</String>
+    <String>txprices</String>
+    <String>95</String>
+    <String>1</String>
+    <String>slots</String>
+    <String>96</String>
     <String>1</String>
     <String>slots</String>
   </FieldSrcTables>
@@ -183,7 +305,7 @@
           <TableViewTableWinSaveInfo>
             <Pos>
               <Left>699</Left>
-              <Top>473</Top>
+              <Top>513</Top>
               <Width>249</Width>
               <Height>220</Height>
             </Pos>
@@ -192,16 +314,16 @@
           <TableViewTableWinSaveInfo>
             <Pos>
               <Left>701</Left>
-              <Top>212</Top>
+              <Top>323</Top>
               <Width>248</Width>
-              <Height>241</Height>
+              <Height>170</Height>
             </Pos>
             <Caption>acc_hierarchy</Caption>
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
               <Left>414</Left>
-              <Top>291</Top>
+              <Top>331</Top>
               <Width>216</Width>
               <Height>157</Height>
             </Pos>
@@ -209,8 +331,8 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>1021</Left>
-              <Top>452</Top>
+              <Left>1016</Left>
+              <Top>355</Top>
               <Width>209</Width>
               <Height>241</Height>
             </Pos>
@@ -219,7 +341,7 @@
           <TableViewTableWinSaveInfo>
             <Pos>
               <Left>1287</Left>
-              <Top>344</Top>
+              <Top>384</Top>
               <Width>220</Width>
               <Height>199</Height>
             </Pos>
@@ -228,7 +350,7 @@
           <TableViewTableWinSaveInfo>
             <Pos>
               <Left>417</Left>
-              <Top>456</Top>
+              <Top>496</Top>
               <Width>192</Width>
               <Height>220</Height>
             </Pos>
@@ -236,12 +358,48 @@
           </TableViewTableWinSaveInfo>
           <TableViewTableWinSaveInfo>
             <Pos>
-              <Left>1063</Left>
-              <Top>342</Top>
+              <Left>1076</Left>
+              <Top>604</Top>
               <Width>142</Width>
               <Height>94</Height>
             </Pos>
             <Caption>slots</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>1279</Left>
+              <Top>166</Top>
+              <Width>222</Width>
+              <Height>215</Height>
+            </Pos>
+            <Caption>txprices</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>739</Left>
+              <Top>157</Top>
+              <Width>213</Width>
+              <Height>156</Height>
+            </Pos>
+            <Caption>txaccounts</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>1289</Left>
+              <Top>590</Top>
+              <Width>201</Width>
+              <Height>157</Height>
+            </Pos>
+            <Caption>txaccsplit</Caption>
+          </TableViewTableWinSaveInfo>
+          <TableViewTableWinSaveInfo>
+            <Pos>
+              <Left>1020</Left>
+              <Top>209</Top>
+              <Width>187</Width>
+              <Height>136</Height>
+            </Pos>
+            <Caption>txlink</Caption>
           </TableViewTableWinSaveInfo>
         </Tables>
         <BroomPoints></BroomPoints>
@@ -264,7 +422,9 @@
           <String>$Table</String>
           <String>%AccountGuid</String>
           <String>%CommodityGuid</String>
+          <String>%SplitGuid</String>
           <String>%TxGuid</String>
+          <String>%CommodityDate</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -295,9 +455,11 @@
           <String>$Field</String>
           <String>$Table</String>
           <String>$Info</String>
+          <String>accounts.guid</String>
           <String>%AccountGuid</String>
           <String>accounts.name</String>
           <String>accounts.account_type</String>
+          <String>accounts.commodity_guid</String>
           <String>%CommodityGuid</String>
           <String>accounts.parent_guid</String>
           <String>AccountName</String>
@@ -312,15 +474,40 @@
           <String>commodities.mnemonic</String>
           <String>commodities.fullname</String>
           <String>splits.guid</String>
+          <String>%SplitGuid</String>
           <String>%TxGuid</String>
+          <String>splits.account_guid</String>
           <String>splits.memo</String>
           <String>splits.action</String>
           <String>splits.reconcileState</String>
+          <String>transactions.guid</String>
           <String>transactions.currencyGuid</String>
+          <String>txaccounts.guid</String>
+          <String>txaccounts.commodity_guid</String>
+          <String>txsplits.guid</String>
+          <String>txsplits.tx_guid</String>
+          <String>txsplits.account_guid</String>
+          <String>txsplits.memo</String>
+          <String>txsplits.action</String>
+          <String>txsplits.reconcileState</String>
+          <String>txaccsplit.accguid</String>
+          <String>txaccsplit.commguid</String>
+          <String>txaccsplit.splitguid</String>
+          <String>txaccsplit.txguid</String>
+          <String>txlink.CommodityDate</String>
+          <String>%CommodityDate</String>
+          <String>txlink.splitguid</String>
           <String>prices.guid</String>
+          <String>prices.commodity_guid</String>
           <String>prices.currencyGuid</String>
           <String>prices.source</String>
           <String>prices.type</String>
+          <String>txprices.guid</String>
+          <String>txprices.commodity_guid</String>
+          <String>txprices.currencyGuid</String>
+          <String>txprices.CommodityDate</String>
+          <String>txprices.source</String>
+          <String>txprices.type</String>
           <String>slots.name</String>
         </FieldNames>
       </FieldTagData>
@@ -330,9 +517,11 @@
           <String>$Field</String>
           <String>$Table</String>
           <String>$Info</String>
+          <String>accounts.guid</String>
           <String>%AccountGuid</String>
           <String>accounts.name</String>
           <String>accounts.account_type</String>
+          <String>accounts.commodity_guid</String>
           <String>%CommodityGuid</String>
           <String>accounts.parent_guid</String>
           <String>AccountName</String>
@@ -347,15 +536,40 @@
           <String>commodities.mnemonic</String>
           <String>commodities.fullname</String>
           <String>splits.guid</String>
+          <String>%SplitGuid</String>
           <String>%TxGuid</String>
+          <String>splits.account_guid</String>
           <String>splits.memo</String>
           <String>splits.action</String>
           <String>splits.reconcileState</String>
+          <String>transactions.guid</String>
           <String>transactions.currencyGuid</String>
+          <String>txaccounts.guid</String>
+          <String>txaccounts.commodity_guid</String>
+          <String>txsplits.guid</String>
+          <String>txsplits.tx_guid</String>
+          <String>txsplits.account_guid</String>
+          <String>txsplits.memo</String>
+          <String>txsplits.action</String>
+          <String>txsplits.reconcileState</String>
+          <String>txaccsplit.accguid</String>
+          <String>txaccsplit.commguid</String>
+          <String>txaccsplit.splitguid</String>
+          <String>txaccsplit.txguid</String>
+          <String>txlink.CommodityDate</String>
+          <String>%CommodityDate</String>
+          <String>txlink.splitguid</String>
           <String>prices.guid</String>
+          <String>prices.commodity_guid</String>
           <String>prices.currencyGuid</String>
           <String>prices.source</String>
           <String>prices.type</String>
+          <String>txprices.guid</String>
+          <String>txprices.commodity_guid</String>
+          <String>txprices.currencyGuid</String>
+          <String>txprices.CommodityDate</String>
+          <String>txprices.source</String>
+          <String>txprices.type</String>
           <String>slots.name</String>
         </FieldNames>
       </FieldTagData>
@@ -381,10 +595,25 @@
           <String>transactions.Year</String>
           <String>transactions.Month</String>
           <String>transactions.enterDate</String>
+          <String>txsplits.reconcileDate</String>
+          <String>txsplits.valueNum</String>
+          <String>txsplits.valueDenom</String>
+          <String>txsplits.value</String>
+          <String>txsplits.quantityNum</String>
+          <String>txsplits.quantityDenom</String>
+          <String>txsplits.quantity</String>
+          <String>txtrans.postDate</String>
+          <String>txlink.postDate</String>
           <String>prices.date</String>
+          <String>prices.localdate</String>
           <String>prices.valueNum</String>
           <String>prices.valueDenom</String>
           <String>prices.value</String>
+          <String>txprices.date</String>
+          <String>txprices.localdate</String>
+          <String>txprices.valueNum</String>
+          <String>txprices.valueDenom</String>
+          <String>txprices.value</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -407,9 +636,17 @@
           <String>transactions.Year</String>
           <String>transactions.Month</String>
           <String>transactions.enterDate</String>
-          <String>prices.date</String>
+          <String>txsplits.reconcileDate</String>
+          <String>txsplits.valueNum</String>
+          <String>txsplits.valueDenom</String>
+          <String>txsplits.quantityNum</String>
+          <String>txsplits.quantityDenom</String>
+          <String>txtrans.postDate</String>
+          <String>txlink.postDate</String>
           <String>prices.valueNum</String>
           <String>prices.valueDenom</String>
+          <String>txprices.valueNum</String>
+          <String>txprices.valueDenom</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -417,7 +654,12 @@
         <FieldNames>
           <String>transactions.postDate</String>
           <String>transactions.enterDate</String>
+          <String>txtrans.postDate</String>
+          <String>txlink.postDate</String>
           <String>prices.date</String>
+          <String>prices.localdate</String>
+          <String>txprices.date</String>
+          <String>txprices.localdate</String>
         </FieldNames>
       </FieldTagData>
       <FieldTagData>
@@ -425,7 +667,8 @@
         <FieldNames>
           <String>transactions.postDate</String>
           <String>transactions.enterDate</String>
-          <String>prices.date</String>
+          <String>txtrans.postDate</String>
+          <String>txlink.postDate</String>
         </FieldNames>
       </FieldTagData>
     </ScriptBased>

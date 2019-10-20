@@ -46,7 +46,9 @@
         <Italic>false</Italic>
         <DropShadow>false</DropShadow>
       </CaptionFont>
-      <Name></Name>
+      <Name>
+        <v>Transactie</v>
+      </Name>
       <Detached>false</Detached>
       <AllowMinimize>true</AllowMinimize>
       <AutoMinimize>false</AutoMinimize>
@@ -221,7 +223,163 @@
     </Striping>
     <ColLayouts>
       <LTableColLayout>
-        <Label></Label>
+        <Label>
+          <v>Path</v>
+        </Label>
+        <Field>
+          <Name>acc_hierarchy.PathName</Name>
+          <Type>PRESENT</Type>
+        </Field>
+        <SortCriteria>
+          <SortByState>1</SortByState>
+          <SortByFrequency>0</SortByFrequency>
+          <SortByNumeric>0</SortByNumeric>
+          <SortByAscii>1</SortByAscii>
+          <SortByLoadOrder>0</SortByLoadOrder>
+          <SortByExpression>0</SortByExpression>
+          <Expression></Expression>
+          <SortByGreyness>0</SortByGreyness>
+        </SortCriteria>
+        <ColWidth>1191</ColWidth>
+        <TextAdjust>0</TextAdjust>
+        <NumAdjust>2</NumAdjust>
+        <LabelAdjust>0</LabelAdjust>
+        <LabelVerticalAdjust>4</LabelVerticalAdjust>
+        <NullSuppression>false</NullSuppression>
+        <DimCellVariations>
+          <CellVariationDef>
+            <PreMinorBorder>
+              <LineStyle>32</LineStyle>
+              <Color>
+                <Col>
+                  <Red>220</Red>
+                  <Green>220</Green>
+                  <Blue>220</Blue>
+                  <Alpha>255</Alpha>
+                </Col>
+                <IsCalculated>false</IsCalculated>
+                <ColorExpr></ColorExpr>
+              </Color>
+              <ExtraBorderSpace16>0</ExtraBorderSpace16>
+            </PreMinorBorder>
+            <PostMinorBorder>
+              <LineStyle>32</LineStyle>
+              <Color>
+                <Col>
+                  <Red>220</Red>
+                  <Green>220</Green>
+                  <Blue>220</Blue>
+                  <Alpha>255</Alpha>
+                </Col>
+                <IsCalculated>false</IsCalculated>
+                <ColorExpr></ColorExpr>
+              </Color>
+              <ExtraBorderSpace16>0</ExtraBorderSpace16>
+            </PostMinorBorder>
+            <MajorBorder>
+              <LineStyle>32</LineStyle>
+              <Color>
+                <Col>
+                  <Red>220</Red>
+                  <Green>220</Green>
+                  <Blue>220</Blue>
+                  <Alpha>255</Alpha>
+                </Col>
+                <IsCalculated>false</IsCalculated>
+                <ColorExpr></ColorExpr>
+              </Color>
+              <ExtraBorderSpace16>0</ExtraBorderSpace16>
+            </MajorBorder>
+            <PreTotalBorder>
+              <LineStyle>32</LineStyle>
+              <Color>
+                <Col>
+                  <Red>220</Red>
+                  <Green>220</Green>
+                  <Blue>220</Blue>
+                  <Alpha>255</Alpha>
+                </Col>
+                <IsCalculated>false</IsCalculated>
+                <ColorExpr></ColorExpr>
+              </Color>
+              <ExtraBorderSpace16>0</ExtraBorderSpace16>
+            </PreTotalBorder>
+            <PostTotalBorder>
+              <LineStyle>32</LineStyle>
+              <Color>
+                <Col>
+                  <Red>220</Red>
+                  <Green>220</Green>
+                  <Blue>220</Blue>
+                  <Alpha>255</Alpha>
+                </Col>
+                <IsCalculated>false</IsCalculated>
+                <ColorExpr></ColorExpr>
+              </Color>
+              <ExtraBorderSpace16>0</ExtraBorderSpace16>
+            </PostTotalBorder>
+            <SizeMod>0</SizeMod>
+            <StyleMod>FONTSTYLE_REGULAR</StyleMod>
+            <TotalSizeMod>0</TotalSizeMod>
+            <TotalStyleMod>FONTSTYLE_BOLD</TotalStyleMod>
+            <FgColor>
+              <Col>
+                <Red>54</Red>
+                <Green>54</Green>
+                <Blue>54</Blue>
+                <Alpha>255</Alpha>
+              </Col>
+              <IsCalculated>false</IsCalculated>
+              <ColorExpr></ColorExpr>
+            </FgColor>
+            <BgColor>
+              <Col>
+                <Red>255</Red>
+                <Green>255</Green>
+                <Blue>255</Blue>
+                <Alpha>255</Alpha>
+              </Col>
+              <IsCalculated>false</IsCalculated>
+              <ColorExpr></ColorExpr>
+            </BgColor>
+            <TotalFgColor></TotalFgColor>
+            <TotalBgColor>
+              <Col>
+                <Red>245</Red>
+                <Green>245</Green>
+                <Blue>245</Blue>
+                <Alpha>255</Alpha>
+              </Col>
+              <IsCalculated>false</IsCalculated>
+              <ColorExpr></ColorExpr>
+            </TotalBgColor>
+            <OtherSizeMod>0</OtherSizeMod>
+            <OtherStyleMod>FONTSTYLE_BOLD</OtherStyleMod>
+            <OtherFgColor></OtherFgColor>
+            <OtherBgColor>
+              <Col>
+                <Red>245</Red>
+                <Green>245</Green>
+                <Blue>245</Blue>
+                <Alpha>255</Alpha>
+              </Col>
+              <IsCalculated>false</IsCalculated>
+              <ColorExpr></ColorExpr>
+            </OtherBgColor>
+          </CellVariationDef>
+        </DimCellVariations>
+        <DropdownSelect>false</DropdownSelect>
+        <ImageRepresentation></ImageRepresentation>
+        <SelectionStyle>SS_USER_PREF</SelectionStyle>
+        <NumberPresentation></NumberPresentation>
+        <ExcludedValuesMode>0</ExcludedValuesMode>
+        <DefaultSearchMode>0</DefaultSearchMode>
+        <Presentation>MODE_TEXT</Presentation>
+      </LTableColLayout>
+      <LTableColLayout>
+        <Label>
+          <v>Account</v>
+        </Label>
         <Field>
           <Name>AccountName</Name>
           <Type>PRESENT</Type>
@@ -373,7 +531,9 @@
         <Presentation>MODE_TEXT</Presentation>
       </LTableColLayout>
       <LTableColLayout>
-        <Label></Label>
+        <Label>
+          <v>enterDate</v>
+        </Label>
         <Field>
           <Name>transactions.enterDate</Name>
           <Type>PRESENT</Type>
@@ -525,7 +685,9 @@
         <Presentation>MODE_TEXT</Presentation>
       </LTableColLayout>
       <LTableColLayout>
-        <Label></Label>
+        <Label>
+          <v>txDate</v>
+        </Label>
         <Field>
           <Name>transactions.postDate</Name>
           <Type>PRESENT</Type>
@@ -677,7 +839,9 @@
         <Presentation>MODE_TEXT</Presentation>
       </LTableColLayout>
       <LTableColLayout>
-        <Label></Label>
+        <Label>
+          <v>description</v>
+        </Label>
         <Field>
           <Name>transactions.description</Name>
           <Type>PRESENT</Type>
@@ -829,7 +993,9 @@
         <Presentation>MODE_TEXT</Presentation>
       </LTableColLayout>
       <LTableColLayout>
-        <Label></Label>
+        <Label>
+          <v>quantity</v>
+        </Label>
         <Field>
           <Name>splits.quantity</Name>
           <Type>PRESENT</Type>
@@ -981,7 +1147,9 @@
         <Presentation>MODE_TEXT</Presentation>
       </LTableColLayout>
       <LTableColLayout>
-        <Label></Label>
+        <Label>
+          <v>value</v>
+        </Label>
         <Field>
           <Name>splits.value</Name>
           <Type>PRESENT</Type>
@@ -1238,6 +1406,7 @@
     <int>3</int>
     <int>4</int>
     <int>5</int>
+    <int>6</int>
   </InterFieldSortOrder>
   <LabelCellVariation>
     <PreMinorBorder>
