@@ -1,0 +1,235 @@
+﻿///$tab Main
+SET ThousandSep=',';
+SET DecimalSep='.';
+SET MoneyThousandSep=',';
+SET MoneyDecimalSep='.';
+SET MoneyFormat='£#,##0.00;-£#,##0.00';
+SET TimeFormat='hh:mm:ss';
+SET DateFormat='DD/MM/YYYY';
+SET TimestampFormat='DD/MM/YYYY hh:mm:ss[.fff]';
+SET FirstWeekDay=0;
+SET BrokenWeeks=0;
+SET ReferenceDay=4;
+SET FirstMonthOfYear=1;
+SET CollationLocale='en-GB';
+SET MonthNames='Jan;Feb;Mar;Apr;May;Jun;Jul;Aug;Sep;Oct;Nov;Dec';
+SET LongMonthNames='January;February;March;April;May;June;July;August;September;October;November;December';
+SET DayNames='Mon;Tue;Wed;Thu;Fri;Sat;Sun';
+SET LongDayNames='Monday;Tuesday;Wednesday;Thursday;Friday;Saturday;Sunday';
+///$tab Initialize
+ODBC CONNECT TO [SQLite3 Datasource;Database=C:\temp\Xherman.gnucash];
+
+QUALIFY *;
+
+UNQUALIFY %AccountGuid;
+UNQUALIFY %CommodityDate;
+UNQUALIFY %CommodityGuid;
+UNQUALIFY ParentGuid;
+UNQUALIFY %SplitGuid;
+UNQUALIFY %TxGuid;
+
+UNQUALIFY AccountName;
+
+SET fDate = 
+		// Date string starts with: 'YYYY-MM-DD' 
+		MAKEDATE(MID($1,1,4), MID($1,6,2), MID($1,9,2));
+
+SET vExpense = sum( {$<acc_hierarchy.AccountName1 = {'Uit'}>}  splits.value);
+SET vIncome = sum( {$<acc_hierarchy.AccountName1 = {'in'}>}  splits.value) * -1;
+SET vUitgaven = sum( {$<transactions.description = {[cn *]}>*$<AccountName = {[Giro+]}>}  splits.value) * -1;
+SET vVzw = sum( {$<acc_hierarchy.AccountName1 = {'vzw'}>}  splits.value);
+SET vVorticc = sum( {$<acc_hierarchy.AccountName1 = {'Vorticc'}>}  splits.value) * -1;
+///$tab accounts
+accounts:
+LOAD guid,
+	guid as %AccountGuid,
+    name,
+    "account_type",
+    "commodity_guid",
+    "commodity_guid" as %CommodityGuid,
+    "commodity_scu" as commodityScu,
+//    "non_std_scu" as nonStdScu,
+    "parent_guid",
+//    code,
+    description,
+    hidden,
+    placeholder;
+SQL SELECT *
+FROM accounts
+WHERE NOT (name = 'Root Account');
+
+acc_hierarchy:
+Hierarchy (%AccountGuid, ParentGuid, AccountName, ParentName, AccountName, PathName, '/', Depth)
+Load %AccountGuid,
+	[accounts.name] as AccountName,
+	[accounts.parent_guid] as ParentGuid
+Resident accounts;
+
+///$tab commodities
+commodities:
+LOAD guid as %CommodityGuid,
+    namespace,
+    mnemonic,
+    fullname,
+    cusip,
+    fraction;
+//    "quote_flag" as quoteFlag,
+//    "quote_source" as quoteSource,
+//    "quote_tz" as quoteTz
+SQL SELECT *
+FROM commodities;
+///$tab splits
+splits:
+LOAD guid,
+    guid as %SplitGuid,
+    "tx_guid" as %TxGuid,
+    "account_guid",
+    "account_guid" as %AccountGuid,
+    memo,
+    action,
+    "reconcile_state" as reconcileState,
+    $(fDate("reconcile_date")) as reconcileDate,
+    "value_num" as valueNum,
+    "value_denom" as valueDenom,
+    "value_num" / "value_denom" as value,
+    "quantity_num" as quantityNum,
+    "quantity_denom" as quantityDenom,
+    "quantity_num" / "quantity_denom" as quantity;
+//    "lot_guid" as lotGuid;
+SQL SELECT *
+FROM splits;
+///$tab transactions
+transactions:
+LOAD guid, 
+    guid as %TxGuid,
+    "currency_guid" as currencyGuid,
+    num,
+    $(fDate("post_date")) as postDate,
+    Year("post_date") as Year,
+    Month("post_date") as Month,
+    $(fDate("enter_date")) as enterDate,
+    description;
+SQL SELECT *
+FROM transactions;
+/*
+Left Join
+LOAD [splits.account_guid] as AccountGuid
+Resident splits;
+*/
+
+/*
+Temp:
+LOAD
+     Min(transactions.postDate) as MinDate,
+     Max(transactions.postDate) as MaxDate
+Resident transactions;
+
+LET vMinDate = floor(peek('Temp.MinDate'));
+LET vMaxDate = floor(peek('Temp.MaxDate'));
+DROP Table Temp;
+*/
+///$tab txsplits
+txaccounts:
+LOAD guid,
+	guid as %AccountGuid,
+	"commodity_guid";
+SQL SELECT *
+FROM accounts
+WHERE NOT (name = 'Root Account')
+  AND (("account_type"='STOCK') OR
+       ("account_type"='MUTUAL'));
+Left Join
+txsplits:
+LOAD guid,
+//    guid as %SplitGuid,
+	 "tx_guid",
+//    "tx_guid" as %TxGuid,
+    "account_guid",
+    "account_guid" as %AccountGuid,
+    memo,
+    action,
+    "reconcile_state" as reconcileState,
+    $(fDate("reconcile_date")) as reconcileDate,
+    "value_num" as valueNum,
+    "value_denom" as valueDenom,
+    "value_num" / "value_denom" as value,
+    "quantity_num" as quantityNum,
+    "quantity_denom" as quantityDenom,
+    "quantity_num" / "quantity_denom" as quantity;
+//    "lot_guid" as lotGuid;
+SQL SELECT *
+FROM splits;
+
+txaccsplit:
+LOAD txaccounts.guid as accguid,
+     txaccounts.commodity_guid as commguid,
+     txsplits.guid as splitguid,
+     txsplits.tx_guid as txguid,
+     txsplits.tx_guid as %TxGuid
+Resident txaccounts;
+Left Join
+txtrans:
+LOAD transactions.guid as %TxGuid,
+    transactions.postDate as postDate
+Resident transactions;
+
+txlink:
+LOAD txtrans.postDate as postDate,
+     txaccsplit.commguid & '*' & Date(txtrans.postDate, 'DD/MM/YYYY') as CommodityDate,
+     txaccsplit.commguid & '*' & Date(txtrans.postDate, 'DD/MM/YYYY') as %CommodityDate,
+     txaccsplit.splitguid as splitguid,
+     txaccsplit.splitguid as %SplitGuid
+Resident txaccsplit;
+///$tab prices
+prices:
+LOAD guid,
+	"commodity_guid",
+    "commodity_guid" as %CommodityGuid,
+    "currency_guid" as currencyGuid,
+    date,
+    ConvertToLocalTime(date, 'Brussels') as localdate,
+    source,
+    type,
+    "value_num" as valueNum,
+    "value_denom" as valueDenom,
+    "value_num" / "value_denom" as value;
+SQL SELECT *
+FROM prices;
+
+txprices:
+LOAD guid,
+	"commodity_guid",
+    "currency_guid" as currencyGuid,
+    date,
+    ConvertToLocalTime(date, 'Brussels') as localdate,
+    "commodity_guid" & '*' & date(ConvertToLocalTime(date, 'Brussels'), 'DD/MM/YYYY') as CommodityDate,
+    "commodity_guid" & '*' & date(ConvertToLocalTime(date, 'Brussels'), 'DD/MM/YYYY') as %CommodityDate,
+    source,
+    type,
+    "value_num" as valueNum,
+    "value_denom" as valueDenom,
+    "value_num" / "value_denom" as value;
+SQL SELECT *
+FROM prices
+WHERE type='transaction';
+///$tab slots
+slots:
+Left Keep (transactions)
+LOAD 
+//	id,
+    "obj_guid" as %TxGuid,
+    name,
+//    "slot_type",
+//    "int64_val",
+    "string_val" as desc;
+//    "double_val",
+//    "timespec_val",
+//    "guid_val",
+//    "numeric_val_num",
+//    "numeric_val_denom",
+//    "gdate_val";
+SQL SELECT *
+FROM slots
+WHERE name = 'notes';
+///$tab exit
+exit script;
