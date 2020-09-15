@@ -19,7 +19,7 @@ session = info_layer.init_session(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAM
 
 # Get transactions for STOCK or MUTUAL accounts
 query = """
-SELECT shares.account_id as account_id, price, date
+SELECT shares.account_id as account_id, price, date, shares
 FROM shares
 JOIN transactions ON transactions.nid=transaction_id
 ORDER BY shares.account_id, date desc
@@ -33,6 +33,7 @@ for row in res:
         price_rec = Price(
             account_id=account_id,
             price=row['price'],
+            shares=row['shares'],
             date=row['date'],
             source='Extract from GnuCash'
         )

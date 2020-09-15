@@ -20,11 +20,19 @@ def handle_account(acc_row, g_id, p_id=None):
     )
     if p_id:
         account.parent_id = p_id
+    if acc_row['account_type'] == 'STOCK' or acc_row['account_type'] == 'MUTUAL':
+        account.isin = acc_row['cusip']
     session.add(account)
     session.commit()
     session.refresh(account)
     parent_id = account.nid
-    acc_query = f"SELECT guid, name, account_type FROM accounts WHERE parent_guid='{acc_guid}' AND hidden=0"
+    acc_query = f"""
+                SELECT accounts.guid as guid, name, account_type, cusip 
+                FROM accounts 
+                LEFT JOIN commodities on commodities.guid=commodity_guid
+                WHERE parent_guid='{acc_guid}' 
+                AND hidden=0
+                """
     acc_res = gnudb.get_query(acc_query)
     for acc_row in acc_res:
         handle_account(acc_row, g_id, parent_id)
@@ -72,7 +80,13 @@ for row in res:
     groups[row['guid']] = group.nid
 
 # Find name, guid, category for every account - recursively from root account
-query = f"SELECT guid, name, account_type FROM accounts WHERE parent_guid='{parent_guid}' AND hidden=0"
+query = f"""
+SELECT accounts.guid as guid, name, account_type, cusip 
+FROM accounts 
+LEFT JOIN commodities on commodities.guid=commodity_guid
+WHERE parent_guid='{parent_guid}' 
+  AND hidden=0
+"""
 res = gnudb.get_query(query)
 for row in res:
     group_id = groups[row['guid']]

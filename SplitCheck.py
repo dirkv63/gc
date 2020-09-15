@@ -17,13 +17,14 @@ book_file = cfg['Main']['book']
 balance = 0
 
 
-def recurse(node, tab=''):
+def rec_function(node, tab=''):
     global balance
-    balance += node.get_balance()
+    print("Trying to find balance for {node}".format(node=node))
+    balance += node.get_balance(recurse=False)
     print("%-80s : %12.2f : %12.2f" % ("%s%s" % (tab, str(node)), node.get_balance(), balance))
     for child in node.children:
-        recurse(child, tab + '  ')
+        rec_function(child, tab + '  ')
 
 
 with open_book(book_file) as book:
-    recurse(book.root_account)
+    rec_function(book.root_account)
