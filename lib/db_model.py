@@ -19,6 +19,7 @@ class Account(Base):
     name = Column(Text, nullable=False)
     guid = Column(Text, nullable=False, unique=True)
     isin = Column(Text)
+    placeholder = Column(Integer)
     category_id = Column(Integer, ForeignKey('categories.nid'), comment="ID of the category")
     group_id = Column(Integer, ForeignKey('groups.nid'), comment="ID of the group")
     parent_id = Column(Integer, ForeignKey('accounts.nid'))
@@ -37,11 +38,14 @@ class Category(Base):
 class Group(Base):
     """
     Table containing the group information. This is Top-level information, such as Bank, In, Pension, ...
+    For Bank accounts - taken into account for Overview - the of the bank is on the Code field.
     """
     __tablename__ = "groups"
     nid = Column(Integer, primary_key=True, autoincrement=True)
     guid = Column(Text, nullable=False, unique=True)
     name = Column(Text, nullable=False)
+    description = Column(Text)
+    category = Column(Text)
 
 
 class Transaction(Base):

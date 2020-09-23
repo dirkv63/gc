@@ -24,6 +24,7 @@ class Write2Excel:
     def init_sheet(self, title):
         """
         Initialize the worksheet.
+
         :param title: mandatory title for the worksheet
         :return: worksheet object
         """
@@ -40,6 +41,7 @@ class Write2Excel:
     def close_workbook(self, filename):
         """
         This method will finalize the current sheet and close the file.
+
         :param filename:
         :return:
         """
@@ -49,6 +51,7 @@ class Write2Excel:
     def write_content(self, content):
         """
         This method will dump the content in an excel worksheet. The content is a list of dictionaries with results.
+
         :param content:
         :return:
         """
@@ -86,6 +89,7 @@ def rc2a1(row=None, col=None):
     """
     This function converts a (row, column) pair (R1C1 notation) to the A1 string notation for excel. The column number
     is converted to the character(s), the row number is appended to the column string.
+
     :param row: Row number (1 .. )
     :param col: Column number (1 .. )
     :return: A1 Notation (column-row) (e.g. 'BF19745')

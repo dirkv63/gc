@@ -1,5 +1,5 @@
 """
-This script collects the list of all occounts.
+This script collects the list of all accounts.
 """
 
 import logging
@@ -16,7 +16,8 @@ def handle_account(acc_row, g_id, p_id=None):
         name=acc_row['name'],
         guid=acc_guid,
         category_id=cats[acc_row['account_type']],
-        group_id=g_id
+        group_id=g_id,
+        placeholder=acc_row['placeholder']
     )
     if p_id:
         account.parent_id = p_id
@@ -27,7 +28,7 @@ def handle_account(acc_row, g_id, p_id=None):
     session.refresh(account)
     parent_id = account.nid
     acc_query = f"""
-                SELECT accounts.guid as guid, name, account_type, cusip 
+                SELECT accounts.guid as guid, name, account_type, cusip, placeholder
                 FROM accounts 
                 LEFT JOIN commodities on commodities.guid=commodity_guid
                 WHERE parent_guid='{acc_guid}' 
@@ -67,12 +68,18 @@ query = f"SELECT guid FROM accounts where name='{root}'"
 res = gnudb.get_query(query)
 row = res[0]
 parent_guid = row['guid']
-query = f"SELECT guid, name FROM accounts WHERE parent_guid='{parent_guid}' AND hidden=0"
+query = f"""
+SELECT guid, name, code, account_type as category 
+FROM accounts 
+WHERE parent_guid='{parent_guid}' AND hidden=0
+"""
 res = gnudb.get_query(query)
 for row in res:
     group = Group(
         name=row['name'],
-        guid=row['guid']
+        guid=row['guid'],
+        description=row['code'],
+        category=row['category']
     )
     session.add(group)
     session.commit()
@@ -81,7 +88,7 @@ for row in res:
 
 # Find name, guid, category for every account - recursively from root account
 query = f"""
-SELECT accounts.guid as guid, name, account_type, cusip 
+SELECT accounts.guid as guid, name, account_type, cusip, placeholder 
 FROM accounts 
 LEFT JOIN commodities on commodities.guid=commodity_guid
 WHERE parent_guid='{parent_guid}' 
