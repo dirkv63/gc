@@ -20,6 +20,7 @@ class Account(Base):
     guid = Column(Text, nullable=False, unique=True)
     isin = Column(Text)
     placeholder = Column(Integer)
+    description = Column(Text)
     category_id = Column(Integer, ForeignKey('categories.nid'), comment="ID of the category")
     group_id = Column(Integer, ForeignKey('groups.nid'), comment="ID of the group")
     parent_id = Column(Integer, ForeignKey('accounts.nid'))
@@ -61,6 +62,7 @@ class Transaction(Base):
     value_denom = Column(Integer)
     quantity_num = Column(Integer)
     quantity_denom = Column(Integer)
+    description = Column(Text)
 
 
 class Share(Base):

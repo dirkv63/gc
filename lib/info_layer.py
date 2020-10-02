@@ -6,19 +6,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 
-class SqlAlConn:
-    """
-    This class creates an sqlalchemy connection and has functions to handle the data.
-    """
-
-    def __init__(self, echo=False):
-        """
-        SqlAlchemy Session
-        :param echo:
-        """
-        self.sess = init_session(echo)
-
-
 class DirectConn:
     """
     This class will set up a direct connection to the database. It allows to reset the database,
@@ -172,3 +159,8 @@ def set_session4engine(engine):
     session_class = sessionmaker(bind=engine)
     session = session_class()
     return session
+
+
+def connect4pandas():
+    db = os.path.join(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAME'))
+    return sqlite3.connect(db)

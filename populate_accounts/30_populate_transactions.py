@@ -27,7 +27,8 @@ for row in res:
 
 # Get transactions
 query = """
-SELECT account_guid, post_date, action, value_num, value_denom, quantity_num, quantity_denom
+SELECT account_guid, post_date, action, value_num, value_denom, quantity_num, quantity_denom, 
+       transactions.description as description
 FROM splits
 LEFT JOIN transactions ON transactions.guid=tx_guid
 """
@@ -49,7 +50,8 @@ for row in res:
             value_num=row['value_num'],
             value_denom=row['value_denom'],
             quantity_num=row['quantity_num'],
-            quantity_denom=row['quantity_denom']
+            quantity_denom=row['quantity_denom'],
+            description=row['description']
         )
         session.add(tx)
 li.end_loop()

@@ -1,5 +1,5 @@
 """
-This script lists the stocks with nid - for stock selection on list_stock details.
+This script lists the accounts with nid and category - for account selection on any kind of detail list.
 """
 
 import logging
@@ -17,17 +17,20 @@ accountdb = info_layer.DirectConn(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAM
 
 # Get transactions for STOCK or MUTUAL accounts
 query = """
-SELECT accounts.nid as nid, accounts.name as account, isin, categories.name as category, groups.name as bank
+SELECT accounts.nid as nid, accounts.name as account, isin, accounts.description as description, 
+       categories.name as category, groups.name as bank
 FROM accounts
 JOIN categories ON categories.nid=accounts.category_id
 JOIN groups ON groups.nid=accounts.group_id
-WHERE categories.name='STOCK' OR categories.name='MUTUAL'"""
+ORDER BY groups.name, accounts.name
+"""
 res = accountdb.get_query(query)
 for row in res:
     nid = row['nid']
     account = row['account']
     isin = row['isin']
+    description = row['description']
     category = row['category']
     bank = row['bank']
-    print(f"{bank}\t{nid}\t{category}\t{account}")
+    print(f"{nid}\t{bank}\t{category}\t{account}\t{description}")
 logging.info("End Application")

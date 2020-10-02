@@ -17,7 +17,8 @@ def handle_account(acc_row, g_id, p_id=None):
         guid=acc_guid,
         category_id=cats[acc_row['account_type']],
         group_id=g_id,
-        placeholder=acc_row['placeholder']
+        placeholder=acc_row['placeholder'],
+        description=acc_row['code']
     )
     if p_id:
         account.parent_id = p_id
@@ -28,7 +29,7 @@ def handle_account(acc_row, g_id, p_id=None):
     session.refresh(account)
     parent_id = account.nid
     acc_query = f"""
-                SELECT accounts.guid as guid, name, account_type, cusip, placeholder
+                SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code
                 FROM accounts 
                 LEFT JOIN commodities on commodities.guid=commodity_guid
                 WHERE parent_guid='{acc_guid}' 
@@ -88,11 +89,11 @@ for row in res:
 
 # Find name, guid, category for every account - recursively from root account
 query = f"""
-SELECT accounts.guid as guid, name, account_type, cusip, placeholder 
+SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code 
 FROM accounts 
 LEFT JOIN commodities on commodities.guid=commodity_guid
 WHERE parent_guid='{parent_guid}' 
-  AND hidden=0
+AND hidden=0
 """
 res = gnudb.get_query(query)
 for row in res:
