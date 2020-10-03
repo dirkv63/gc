@@ -1,9 +1,13 @@
 import logging
+import numpy as np
 import os
+import pandas as pd
 import sqlite3
 from lib.db_model import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+spaarlist = ['Spaargeld', 'sparen', 'Opening Balance']
 
 
 class DirectConn:
@@ -133,6 +137,46 @@ class DirectConn:
         self.dbConn.commit()
         return
 
+
+class PandasConn:
+
+    def __init__(self):
+        self.cnx = connect4pandas()
+
+    def get_verzekering(self, nid):
+        """
+        This method collects the dataframe for the verzekering with ID nid.
+
+        :param nid:
+        :return:
+        """
+        query = f"""
+        SELECT accounts.name as name, isin, date, transactions.description as description, 
+               value_num, value_denom, quantity_num, quantity_denom
+        FROM transactions
+        JOIN accounts ON accounts.nid=transactions.account_id
+        WHERE account_id={nid}
+        ORDER BY date asc
+        """
+        res = pd.read_sql_query(query, self.cnx)
+        res['value'] = np.where(res['value_denom'] == 0, 0, res['value_num'] / res['value_denom'])
+        res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
+        res['month'] = pd.to_datetime(res.date).dt.to_period('M')
+        res.drop(['value_num', 'value_denom', 'quantity_num', 'quantity_denom'], axis=1, inplace=True)
+        res['cat'] = np.where(res['description'].isin(spaarlist), 'savings', 'delta')
+        per_month = pd.pivot_table(res, values='value', index=['month'], columns=['cat'], aggfunc=np.sum)
+        per_month.reset_index(inplace=True)
+        per_month['change'] = per_month['savings'].fillna(0) + per_month['delta'].fillna(0)
+        per_month['in'] = per_month['savings'].fillna(0).cumsum()
+        per_month['total'] = per_month['change'].cumsum()
+        per_month['pct'] =  ((per_month['total'] - per_month['in']) / per_month ['in'])
+        cols = ['month', 'savings', 'delta', 'change', 'in', 'total', 'pct']
+        per_month = per_month[cols]
+        return per_month
+
+    @staticmethod
+    def writer(ffn):
+        return pd.ExcelWriter(ffn, engine='xlsxwriter')
 
 def init_session(dbdir, dbname, echo=False):
     """

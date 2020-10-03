@@ -7,7 +7,6 @@ import argparse
 import datetime
 import logging
 import os
-import numpy as np
 import pandas as pd
 from lib import my_env
 from lib import info_layer
@@ -35,24 +34,17 @@ wbdir = os.getenv('WBDIR')
 wbname = os.getenv('WBNAME')
 wbfile = f"{wbname}_{nid}_{now}.xlsx"
 wbffn = os.path.join(wbdir, wbfile)
-spaarlist = ['Spaargeld', 'sparen']
+pdc = info_layer.PandasConn()
 
-query = f"""
-SELECT accounts.name as name, isin, date, transactions.description, 
-       value_num, value_denom, quantity_num, quantity_denom
-FROM transactions
-JOIN accounts ON accounts.nid=transactions.account_id
-WHERE account_id={nid}
-ORDER BY date asc
-"""
-with pd.ExcelWriter(wbffn) as writer:
-    res = pd.read_sql_query(query, cnx)
-    res['value'] = np.where(res['value_denom'] == 0, 0, res['value_num'] / res['value_denom'])
-    res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
-    res['month'] = pd.to_datetime(res.date).dt.to_period('M')
-    res.drop(['value_num', 'value_denom', 'quantity_num', 'quantity_denom'], axis=1, inplace=True)
-    per_month = res.groupby('month')['value'].sum()
-    # https://stackoverflow.com/questions/45083000/pandas-groupby-with-conditional-formula
-    print(per_month)
-    res.to_excel(writer, index=False)
+writer = pdc.writer(wbffn)
+df = pdc.get_verzekering(30)
+df.to_excel(writer, sheet_name='summary', index=False)
+# Format the output
+wb = writer.book
+ws = writer.sheets['summary']
+format1 = wb.add_format({'num_format': '#,##0.00'})
+format2 = wb.add_format({'num_format': '0.00%'})
+ws.set_column('B:F', None, format1)
+ws.set_column('G:G', None, format2)
+writer.save()
 logging.info("End Application")
