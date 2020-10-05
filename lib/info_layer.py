@@ -1,3 +1,4 @@
+import datetime
 import logging
 import numpy as np
 import os
@@ -7,7 +8,7 @@ from lib.db_model import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-spaarlist = ['Spaargeld', 'sparen', 'Opening Balance']
+deltalist = ['Bankkosten', 'intresten', 'Minwaarde']
 
 
 class DirectConn:
@@ -143,6 +144,117 @@ class PandasConn:
     def __init__(self):
         self.cnx = connect4pandas()
 
+    def get_accounts(self):
+        """
+        This method collects the account information for an ID
+
+        :return: Dataframe with the account information for all accounts
+        """
+        query = "SELECT * FROM accounts"
+        return pd.read_sql_query(query, self.cnx)
+
+    def get_account_summary(self):
+        """
+        This method collects summary information for all accounts.
+
+        :return:
+        """
+        today = datetime.datetime.now().strftime("%Y-%m-%d")
+        query = f"""
+        SELECT groups.description as bank, categories.name as category, accounts.name as name, max(date) as last_date,
+               sum(value_num) as value_dec, max(value_denom) as value_denom,
+               sum(quantity_num) as quantity_dec, max(quantity_denom) as quantity_denom 
+        FROM transactions
+        JOIN accounts ON accounts.nid=transactions.account_id
+        JOIN groups ON groups.nid=accounts.group_id
+        JOIN categories ON categories.nid=accounts.category_id
+        WHERE groups.category='BANK'
+        AND transactions.date <= '{today}'
+        AND length(groups.description) > 0
+        AND accounts.placeholder=0
+        GROUP BY transactions.account_id
+        ORDER BY groups.description, categories.name, accounts.name
+        """
+        res = pd.read_sql_query(query, self.cnx)
+        res['quantity'] = np.where(res['category'] == 'BANK', np.NaN, res['quantity_dec'] / res['quantity_denom'])
+        res['value'] = res['value_dec'] / res['value_denom']
+        res['category'] = res['category'].str.capitalize()
+        cols2drop = ['value_dec', 'value_denom', 'quantity_dec', 'quantity_denom']
+        res.drop(cols2drop, axis=1, inplace=True)
+        return res
+
+    def get_account(self, nid):
+        """
+        This method collects the transactions for a specific account. This can be used for debugging
+
+        :param nid: Account id for which the transactions are required.
+        :return: Dataframe with transactions
+        """
+        query = f"""
+        SELECT accounts.name as name, isin, date, transactions.description as description, 
+               value_num, value_denom, quantity_num, quantity_denom
+        FROM transactions
+        JOIN accounts ON accounts.nid=transactions.account_id
+        WHERE account_id={nid}
+        ORDER BY date asc
+        """
+        res = pd.read_sql_query(query, self.cnx)
+        res['value'] = np.where(res['value_denom'] == 0, 0, res['value_num'] / res['value_denom'])
+        res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
+        res['price'] = np.where(res['quantity'] == 0, 0, res['value'] / res['quantity'])
+        res['shares'] = res['quantity'].cumsum()
+        res['bought'] = res['value'].cumsum()
+        return res
+
+    def get_all_savings(self):
+        """
+        This method returns a dataframe containing all savings accounts.
+
+        :return:
+        """
+        query = """
+        SELECT accounts.nid as nid, accounts.name as name, accounts.description as description, 
+               categories.name as category
+        FROM accounts
+        JOIN categories ON categories.nid=accounts.category_id
+        JOIN groups ON groups.nid=accounts.group_id
+        WHERE categories.name='STOCK' OR categories.name='MUTUAL'
+           OR accounts.description = 'spaarverzekering'
+        ORDER BY groups.name, accounts.name
+        """
+        return  pd.read_sql_query(query, self.cnx)
+
+    def get_stock(self, nid):
+        """
+        This method collects the dataframe for a stock.
+
+        :param nid:
+        :return:
+        """
+        query = f"""
+        SELECT accounts.name as name, isin, date, transactions.description, 
+               value_num, value_denom, quantity_num, quantity_denom
+        FROM transactions
+        JOIN accounts ON accounts.nid=transactions.account_id
+        WHERE account_id={nid}
+        ORDER BY date asc
+        """
+        res = pd.read_sql_query(query, self.cnx)
+        res['value'] = np.where(res['value_denom'] == 0, 0, res['value_num'] / res['value_denom'])
+        res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
+        res['price'] = np.where(res['quantity'] == 0, 0, res['value'] / res['quantity'])
+        res ['shares'] = res['quantity'].cumsum()
+        res['bought'] = res['value'].cumsum()
+        last_row = res.iloc[-1]
+        last_price = last_row.loc['price']
+        res['current value'] = res['shares'] * last_price
+        res['pct'] = np.where(res['price'] == 0, 0, (last_price - res['price']) / res['price'])
+        res['delta'] = res['current value'] - res['bought']
+        cols2drop = ['name', 'isin', 'description', 'value_num', 'value_denom', 'quantity_num', 'quantity_denom']
+        res.drop(cols2drop, axis=1, inplace=True)
+        cols = ['date', 'quantity', 'price', 'value', 'shares', 'bought', 'current value', 'delta', 'pct']
+        return res[cols]
+
     def get_verzekering(self, nid):
         """
         This method collects the dataframe for the verzekering with ID nid.
@@ -163,7 +275,7 @@ class PandasConn:
         res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
         res['month'] = pd.to_datetime(res.date).dt.to_period('M')
         res.drop(['value_num', 'value_denom', 'quantity_num', 'quantity_denom'], axis=1, inplace=True)
-        res['cat'] = np.where(res['description'].isin(spaarlist), 'savings', 'delta')
+        res['cat'] = np.where(res['description'].isin(deltalist), 'delta', 'savings')
         per_month = pd.pivot_table(res, values='value', index=['month'], columns=['cat'], aggfunc=np.sum)
         per_month.reset_index(inplace=True)
         per_month['change'] = per_month['savings'].fillna(0) + per_month['delta'].fillna(0)
@@ -177,6 +289,73 @@ class PandasConn:
     @staticmethod
     def writer(ffn):
         return pd.ExcelWriter(ffn, engine='xlsxwriter')
+
+def format_account(ws, fmt_dict):
+    """
+    This function formats a spaarverzekering sheet.
+
+    :param ws:
+    :param fmt_dict:
+    :return:
+    """
+    ws.set_column('C:C', 12)
+    ws.set_column('D:D', 36)
+    ws.set_column('I:M', None, fmt_dict['fmt_num'])
+    return
+
+def format_book(wb):
+    """
+    This function add format definitions to a workbook.
+
+    :param wb:
+    :return:
+    """
+    fmt_dict  = dict(
+        fmt_num=wb.add_format({'num_format': '#,##0.00'}),
+        fmt_pct=wb.add_format({'num_format': '0.00%'})
+    )
+    return fmt_dict
+
+def format_stock(ws, fmt_dict):
+    """
+    This function formats a stock sheet
+
+    :param ws:
+    :param fmt_dict: dictionary containing format definitions
+    :return:
+    """
+    ws.set_column('B:F', None, fmt_dict['fmt_num'])
+    ws.set_column('G:G', 16, fmt_dict['fmt_num'])
+    ws.set_column('H:H', None, fmt_dict['fmt_num'])
+    ws.set_column('I:I', None, fmt_dict['fmt_pct'])
+    ws.set_column('A:A', 12)
+    return
+
+def format_summary(ws, fmt_dict):
+    """
+    This function formats the accounts summary sheet.
+
+    :param ws:
+    :param fmt_dict:
+    :return:
+    """
+    ws.set_column('E:F', None, fmt_dict['fmt_num'])
+    ws.set_column('A:B', 12)
+    ws.set_column('C:C', 36)
+    ws.set_column('D:D', 12)
+    return
+
+def format_verzekering(ws, fmt_dict):
+    """
+    This function formats a spaarverzekering sheet.
+
+    :param ws:
+    :param fmt_dict:
+    :return:
+    """
+    ws.set_column('B:F', None, fmt_dict['fmt_num'])
+    ws.set_column('G:G', None, fmt_dict['fmt_pct'])
+    return
 
 def init_session(dbdir, dbname, echo=False):
     """

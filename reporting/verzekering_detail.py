@@ -7,7 +7,6 @@ import argparse
 import datetime
 import logging
 import os
-import pandas as pd
 from lib import my_env
 from lib import info_layer
 
@@ -20,31 +19,31 @@ logging.info("Start application")
 parser = argparse.ArgumentParser(
     description="Provide nid for the account."
 )
-parser.add_argument('-n', '--nid', type=int, default=31,
+parser.add_argument('-n', '--nid', type=int, default=30,
                     help='Provide the nid for the account')
 args = parser.parse_args()
 nid = args.nid
 logging.info(f"Find detail information for Account {nid}")
 
-accountdb = info_layer.DirectConn(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAME'))
-cnx = info_layer.connect4pandas()
+pdc = info_layer.PandasConn()
 
 now = datetime.datetime.now().strftime("%Y%m%d")
 wbdir = os.getenv('WBDIR')
-wbname = os.getenv('WBNAME')
-wbfile = f"{wbname}_{nid}_{now}.xlsx"
-wbffn = os.path.join(wbdir, wbfile)
-pdc = info_layer.PandasConn()
 
+accounts = pdc.get_accounts()
+this_account = accounts[accounts['nid'] == nid].iloc[0]
+name = this_account.loc['name'][:31]
+wbfile = f"{name}_{now}.xlsx"
+wbffn = os.path.join(wbdir, wbfile)
+
+
+# Configure excel and format
 writer = pdc.writer(wbffn)
-df = pdc.get_verzekering(30)
-df.to_excel(writer, sheet_name='summary', index=False)
+fmt_dict = info_layer.format_book(writer.book)
+# Collect info
+df = pdc.get_verzekering(nid)
+df.to_excel(writer, sheet_name=name, index=False)
 # Format the output
-wb = writer.book
-ws = writer.sheets['summary']
-format1 = wb.add_format({'num_format': '#,##0.00'})
-format2 = wb.add_format({'num_format': '0.00%'})
-ws.set_column('B:F', None, format1)
-ws.set_column('G:G', None, format2)
+info_layer.format_verzekering(writer.sheets[name], fmt_dict)
 writer.save()
 logging.info("End Application")

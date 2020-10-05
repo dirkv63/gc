@@ -1,14 +1,12 @@
 """
-This script collects detail information for an account.
-It will collect all transactions for the account.
+This script collects transaction information for an account.
+This can be used for debugging purposes.
 """
 
 import argparse
 import datetime
 import logging
 import os
-import numpy as np
-import pandas as pd
 from lib import my_env
 from lib import info_layer
 
@@ -21,33 +19,31 @@ logging.info("Start application")
 parser = argparse.ArgumentParser(
     description="Provide nid for the account."
 )
-parser.add_argument('-n', '--nid', type=int, default=17,
+parser.add_argument('-n', '--nid', type=int, default=31,
                     help='Provide the nid for the account')
 args = parser.parse_args()
 nid = args.nid
 logging.info(f"Find detail information for Account {nid}")
 
-accountdb = info_layer.DirectConn(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAME'))
-cnx = info_layer.connect4pandas()
+pdc = info_layer.PandasConn()
 
 now = datetime.datetime.now().strftime("%Y%m%d")
 wbdir = os.getenv('WBDIR')
-wbname = os.getenv('WBNAME')
-wbfile = f"{wbname}_{nid}_{now}.xlsx"
+
+accounts = pdc.get_accounts()
+this_account = accounts[accounts['nid'] == nid].iloc[0]
+name = this_account.loc['name'][:31]
+wbfile = f"{name}_{now}.xlsx"
 wbffn = os.path.join(wbdir, wbfile)
 
-query = f"""
-SELECT accounts.name as name, isin, date, transactions.description, 
-       value_num, value_denom, quantity_num, quantity_denom
-FROM transactions
-JOIN accounts ON accounts.nid=transactions.account_id
-WHERE account_id={nid}
-ORDER BY date asc
-"""
-with pd.ExcelWriter(wbffn) as writer:
-    res = pd.read_sql_query(query, cnx)
-    res['value'] = np.where(res['value_denom'] == 0, 0, res['value_num'] / res['value_denom'])
-    res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
-    res.drop(['value_num', 'value_denom', 'quantity_num', 'quantity_denom'], axis=1, inplace=True)
-    res.to_excel(writer, index=False)
+
+# Configure excel and format
+writer = pdc.writer(wbffn)
+fmt_dict = info_layer.format_book(writer.book)
+# Collect info
+df = pdc.get_account(nid)
+df.to_excel(writer, sheet_name=name, index=False)
+# Format the output
+info_layer.format_account(writer.sheets[name], fmt_dict)
+writer.save()
 logging.info("End Application")
