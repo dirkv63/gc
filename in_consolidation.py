@@ -41,5 +41,5 @@ xl = write2excel.Write2Excel()
 xl.init_sheet("MonthlyCashFlow")
 xl.write_content(xl_arr)
 
-fn = os.path.join(cfg["Main"]["reportdir"], "MCF201806.xlsx")
+fn = os.path.join(cfg["Main"]["reportdir"], "MCF201806_bis.xlsx")
 xl.close_workbook(fn)

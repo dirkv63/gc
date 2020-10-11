@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 # This program is Copyright (C) 2017, Paul Lutus
 # and is released under the GPL:
 # https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -27,4 +24,20 @@ def rec_function(node, tab=''):
 
 
 with open_book(book_file) as book:
-    rec_function(book.root_account)
+    print(book.default_currency)
+
+    for price in book.prices:
+        print(price)
+
+    comm = book.commodities(cusip='LU1863263429')
+    print(comm.mnemonic)
+    for price in comm.prices:
+        print(f"Price date: {price.date} value: {price.value} {price.currency.mnemonic}/{price.commodity.mnemonic}")
+
+    # https://github.com/sdementen/piecash/issues/97 => insert price
+    """
+    for acc in book.accounts:
+        for sp in acc.splits:
+            print(sp.transaction.description)
+    # rec_function(book.root_account)
+    """
