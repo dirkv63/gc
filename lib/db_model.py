@@ -21,6 +21,7 @@ class Account(Base):
     isin = Column(Text)
     placeholder = Column(Integer)
     description = Column(Text)
+    commodity_guid = Column(Text)
     category_id = Column(Integer, ForeignKey('categories.nid'), comment="ID of the category")
     group_id = Column(Integer, ForeignKey('groups.nid'), comment="ID of the group")
     parent_id = Column(Integer, ForeignKey('accounts.nid'))
@@ -84,8 +85,8 @@ class Price(Base):
     """
     __tablename__ = "price"
     nid = Column(Integer, primary_key=True, autoincrement=True)
-    account_id = Column(Integer, ForeignKey('accounts.nid'), nullable=False)
-    price = Column(Float)
-    shares = Column(Float)
+    commodity_guid = Column(Text, nullable=False)
     date = Column(Text)
-    source = Column(Text)
+    currency = Column(Text, nullable=False)
+    value_num = Column(Integer)
+    value_denom = Column(Integer)

@@ -329,6 +329,7 @@ def format_stock(ws, fmt_dict):
     ws.set_column('H:H', None, fmt_dict['fmt_num'])
     ws.set_column('I:I', None, fmt_dict['fmt_pct'])
     ws.set_column('A:A', 12)
+    ws.freeze_panes(1,0)
     return
 
 def format_summary(ws, fmt_dict):
@@ -343,6 +344,7 @@ def format_summary(ws, fmt_dict):
     ws.set_column('A:B', 12)
     ws.set_column('C:C', 36)
     ws.set_column('D:D', 12)
+    ws.freeze_panes(1, 0)
     return
 
 def format_verzekering(ws, fmt_dict):
@@ -355,6 +357,7 @@ def format_verzekering(ws, fmt_dict):
     """
     ws.set_column('B:F', None, fmt_dict['fmt_num'])
     ws.set_column('G:G', None, fmt_dict['fmt_pct'])
+    ws.freeze_panes(1, 0)
     return
 
 def init_session(dbdir, dbname, echo=False):

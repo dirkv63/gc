@@ -9,16 +9,25 @@ from lib import my_env
 from lib import info_layer
 
 
-def handle_account(acc_row, g_id, p_id=None):
-    # global cats
+def handle_account(acc_row, bank_id, p_id=None):
+    """
+    This function gets an account row, adds it to the accounts table then finds all children for this account in a 
+    recursive way. This allows to transfer the parent_id to the children records.
+    
+    :param acc_row: Result of query to accounts table
+    :param bank_id: ID of the Bank or Group for the account.
+    :param p_id: Immediate Parent of the account
+    :return: 
+    """
     acc_guid = acc_row['guid']
     account = Account(
         name=acc_row['name'],
         guid=acc_guid,
         category_id=cats[acc_row['account_type']],
-        group_id=g_id,
+        group_id=bank_id,
         placeholder=acc_row['placeholder'],
-        description=acc_row['code']
+        description=acc_row['code'],
+        commodity_guid=acc_row['commodity_guid']
     )
     if p_id:
         account.parent_id = p_id
@@ -29,7 +38,7 @@ def handle_account(acc_row, g_id, p_id=None):
     session.refresh(account)
     parent_id = account.nid
     acc_query = f"""
-                SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code
+                SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code, commodity_guid
                 FROM accounts 
                 LEFT JOIN commodities on commodities.guid=commodity_guid
                 WHERE parent_guid='{acc_guid}' 
@@ -37,7 +46,7 @@ def handle_account(acc_row, g_id, p_id=None):
                 """
     acc_res = gnudb.get_query(acc_query)
     for acc_row in acc_res:
-        handle_account(acc_row, g_id, parent_id)
+        handle_account(acc_row, bank_id, parent_id)
 
 
 # Initialize Environment
@@ -50,7 +59,7 @@ session = info_layer.init_session(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAM
 cats = {}
 groups = {}
 
-# First populate categories
+# First populate categories table and remember nid in cats dictionary.
 query = "SELECT DISTINCT account_type FROM accounts"
 res = gnudb.get_query(query)
 for row in res:
@@ -64,11 +73,14 @@ for row in res:
     cats[cat] = cat_row.nid
 
 # Then get Group / Bank Accounts
+# Start with Root account - this is the initial parent but will not be stored
 root = 'Root Account'
 query = f"SELECT guid FROM accounts where name='{root}'"
 res = gnudb.get_query(query)
 row = res[0]
 parent_guid = row['guid']
+# Direct children of the Root account are Bank identifiers or Group (in - uit - ...) identifiers.
+# These are to be stored in the groups table.
 query = f"""
 SELECT guid, name, code, account_type as category 
 FROM accounts 
@@ -87,9 +99,11 @@ for row in res:
     session.refresh(group)
     groups[row['guid']] = group.nid
 
-# Find name, guid, category for every account - recursively from root account
+# Next find all accounts related to a Bank or Group.
+# Find name, guid, category for every account - recursively from root account.
+# Bank and Group accounts are identified with 'Placeholder=1'. A Bank account can have a Sub-Group (Effectenrekening).
 query = f"""
-SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code 
+SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code, commodity_guid
 FROM accounts 
 LEFT JOIN commodities on commodities.guid=commodity_guid
 WHERE parent_guid='{parent_guid}' 
