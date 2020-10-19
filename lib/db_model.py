@@ -6,9 +6,7 @@ from sqlalchemy import Column, Integer, Text, ForeignKey, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-
 Base = declarative_base()
-
 
 class Account(Base):
     """
@@ -27,7 +25,6 @@ class Account(Base):
     parent_id = Column(Integer, ForeignKey('accounts.nid'))
     group = relationship("Group", backref="hasAccounts")
 
-
 class Category(Base):
     """
     Table containing categories
@@ -35,7 +32,6 @@ class Category(Base):
     __tablename__ = "categories"
     nid = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text, nullable=False)
-
 
 class Group(Base):
     """
@@ -48,7 +44,6 @@ class Group(Base):
     name = Column(Text, nullable=False)
     description = Column(Text)
     category = Column(Text)
-
 
 class Transaction(Base):
     """
@@ -65,7 +60,6 @@ class Transaction(Base):
     quantity_denom = Column(Integer)
     description = Column(Text)
 
-
 class Share(Base):
     """
     Table containing the shares records
@@ -78,15 +72,26 @@ class Share(Base):
     shares = Column(Float)
     cost = Column(Float)
 
-
 class Price(Base):
     """
-    Table containing Price information for assets, including the source of the price.
+    Table containing Price information for commodities.
     """
     __tablename__ = "price"
     nid = Column(Integer, primary_key=True, autoincrement=True)
     commodity_guid = Column(Text, nullable=False)
     date = Column(Text)
     currency = Column(Text, nullable=False)
+    value_num = Column(Integer)
+    value_denom = Column(Integer)
+
+class XRate(Base):
+    """
+    Table containing Exchange Rate information.
+    """
+    __tablename__ = "xrate"
+    nid = Column(Integer, primary_key=True, autoincrement=True)
+    local_curr = Column(Text, nullable=False)
+    foreign_curr = Column(Text, nullable=False)
+    date = Column(Text)
     value_num = Column(Integer)
     value_denom = Column(Integer)

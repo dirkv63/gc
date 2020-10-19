@@ -36,7 +36,7 @@ accounts = pdc.get_all_savings()
 for index, row in accounts.iterrows():
     # Get transactions for STOCK or MUTUAL accounts
     account = row['name'][:30]
-    print(f"Getting results for account {account}")
+    logging.debug(f"Getting results for account {account}")
     if row['category'] == "BANK":
         df = pdc.get_verzekering(row['nid'])
         if len(df.index) > 1:

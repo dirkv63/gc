@@ -161,13 +161,17 @@ class PandasConn:
         """
         today = datetime.datetime.now().strftime("%Y-%m-%d")
         query = f"""
-        SELECT groups.description as bank, categories.name as category, accounts.name as name, max(date) as last_date,
-               sum(value_num) as value_dec, max(value_denom) as value_denom,
-               sum(quantity_num) as quantity_dec, max(quantity_denom) as quantity_denom 
+        SELECT groups.description as bank, categories.name as category, accounts.name as name, accounts.nid as nid,
+               accounts.description as description,
+               max(transactions.date) as last_date,
+               sum(transactions.value_num) as value_dec, max(transactions.value_denom) as value_denom,
+               sum(quantity_num) as quantity_dec, max(quantity_denom) as quantity_denom,
+               price.value_num as price_num, price.value_denom as price_denom
         FROM transactions
         JOIN accounts ON accounts.nid=transactions.account_id
         JOIN groups ON groups.nid=accounts.group_id
         JOIN categories ON categories.nid=accounts.category_id
+        LEFT JOIN price ON accounts.commodity_guid=price.commodity_guid
         WHERE groups.category='BANK'
         AND transactions.date <= '{today}'
         AND length(groups.description) > 0
@@ -177,11 +181,29 @@ class PandasConn:
         """
         res = pd.read_sql_query(query, self.cnx)
         res['quantity'] = np.where(res['category'] == 'BANK', np.NaN, res['quantity_dec'] / res['quantity_denom'])
-        res['value'] = res['value_dec'] / res['value_denom']
+        res['bought'] = res['value_dec'] / res['value_denom']
+        res['value'] = np.where(res['price_denom'] > 0, res['quantity'] * (res['price_num'] / res['price_denom']),
+                                res['value_dec'] / res['value_denom'])
+        for idx, row in res[res['description']=='spaarverzekering'].iterrows():
+            verzekering_df = self.get_verzekering(row['nid'])
+            last_row = verzekering_df.iloc[-1]
+            res.iloc[idx, res.columns.get_loc('bought')] = last_row.loc['in']
+            res.iloc[idx, res.columns.get_loc('value')] = last_row.loc['total']
         res['category'] = res['category'].str.capitalize()
-        cols2drop = ['value_dec', 'value_denom', 'quantity_dec', 'quantity_denom']
+        res['delta'] = np.where(res['bought'] != res['value'], res['value'] - res['bought'], np.NaN)
+        res['delta%'] = np.where(res['bought'] != res['value'], (res['value'] - res['bought']) / res['bought'], np.NaN)
+        cols2drop = ['value_dec', 'value_denom', 'quantity_dec', 'quantity_denom', 'price_num', 'price_denom', 'nid',
+                     'description']
         res.drop(cols2drop, axis=1, inplace=True)
-        return res
+        list_dfs_per_bank = []
+        for _, df_bank in res.groupby('bank', as_index=False):
+            df_bank.loc['Total', 'bought'] = df_bank['bought'].sum()
+            df_bank.loc['Total', 'value'] = df_bank['value'].sum()
+            df_bank.loc['Total', 'delta'] = df_bank.loc['Total', 'value'] - df_bank.loc['Total', 'bought']
+            df_bank.loc['Total', 'delta%'] = df_bank.loc['Total', 'delta'] / df_bank.loc['Total', 'bought']
+            list_dfs_per_bank.append(df_bank)
+        res_total = pd.concat(list_dfs_per_bank, ignore_index=True)
+        return res_total
 
     def get_account(self, nid):
         """
@@ -232,10 +254,12 @@ class PandasConn:
         :return:
         """
         query = f"""
-        SELECT accounts.name as name, isin, date, transactions.description, 
-               value_num, value_denom, quantity_num, quantity_denom
+        SELECT accounts.name as name, isin, transactions.date as date, transactions.description, 
+               transactions.value_num as value_num, transactions.value_denom as value_denom, quantity_num, 
+               quantity_denom, price.value_num as price_num, price.value_denom as price_denom
         FROM transactions
         JOIN accounts ON accounts.nid=transactions.account_id
+        LEFT JOIN price ON accounts.commodity_guid=price.commodity_guid
         WHERE account_id={nid}
         ORDER BY date asc
         """
@@ -246,7 +270,13 @@ class PandasConn:
         res ['shares'] = res['quantity'].cumsum()
         res['bought'] = res['value'].cumsum()
         last_row = res.iloc[-1]
-        last_price = last_row.loc['price']
+        # Check if info from price table available else get last price from transactions
+        if res['value_denom'].size == 0:
+            last_price = last_row.loc['price']
+            logging.debug("Current price from transactions.")
+        else:
+            last_price = last_row.loc['value_num'] / last_row.loc['value_denom']
+            logging.debug("Current price from price database")
         res['current value'] = res['shares'] * last_price
         res['pct'] = np.where(res['price'] == 0, 0, (last_price - res['price']) / res['price'])
         res['delta'] = res['current value'] - res['bought']
@@ -340,7 +370,8 @@ def format_summary(ws, fmt_dict):
     :param fmt_dict:
     :return:
     """
-    ws.set_column('E:F', None, fmt_dict['fmt_num'])
+    ws.set_column('E:H', None, fmt_dict['fmt_num'])
+    ws.set_column('I:I', None, fmt_dict['fmt_pct'])
     ws.set_column('A:B', 12)
     ws.set_column('C:C', 36)
     ws.set_column('D:D', 12)

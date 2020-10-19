@@ -25,12 +25,13 @@ FROM
     FROM prices
     LEFT JOIN commodities
     ON commodities.guid = prices.commodity_guid
-    WHERE namespace='FUND' AND length(cusip) > 3
+    WHERE namespace='FUND' 
     GROUP BY commodity_guid) 
     AS latest_time
 INNER JOIN prices ON commodity_guid=max_commodity_guid AND date=max_date
 INNER JOIN commodities on commodities.guid=prices.currency_guid
 """
+# AND length(cusip) > 3
 res = gnudb.get_query(query)
 for row in res:
     price_rec = Price(
@@ -41,16 +42,33 @@ for row in res:
         value_denom=row['value_denom']
     )
     session.add(price_rec)
-session.commit()
-logging.info("End Application")
 
-"""
-Query for exchange rate:
-SELECT commodity_guid AS max_commodity_guid, commodities.mnemonic, curr.mnemonic, 
-       currency_guid AS max_currency_guid, max(date) AS max_date
+# Get latest currency exchange rates from prices database
+query = """
+SELECT date, local_curr, foreign_curr, value_num, value_denom
+FROM
+(SELECT commodity_guid as max_commodity_guid, currency_guid as max_currency_guid, 
+		commodities.mnemonic as local_curr, curr.mnemonic as foreign_curr,
+       max(date) as max_date
 FROM prices
 LEFT JOIN commodities ON commodities.guid = prices.commodity_guid
 LEFT JOIN commodities as curr ON curr.guid = prices.currency_guid
 WHERE commodities.namespace='CURRENCY' 
-GROUP BY commodity_guid, currency_guid, commodities.mnemonic, curr.mnemonic
+  AND commodities.mnemonic < curr.mnemonic
+GROUP BY commodity_guid, currency_guid) as latest_time
+INNER JOIN prices ON commodity_guid=max_commodity_guid
+			 	 AND currency_guid=max_currency_guid
+				 AND date=max_date
 """
+res = gnudb.get_query(query)
+for row in res:
+    xrate_rec = XRate(
+        local_curr=row['local_curr'],
+        foreign_curr=row['foreign_curr'],
+        date=row['date'],
+        value_num=row['value_num'],
+        value_denom=row['value_denom']
+    )
+    session.add(xrate_rec)
+session.commit()
+logging.info("End Application")

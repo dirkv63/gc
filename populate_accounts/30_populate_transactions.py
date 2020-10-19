@@ -33,7 +33,7 @@ FROM splits
 LEFT JOIN transactions ON transactions.guid=tx_guid
 """
 res = gnudb.get_query(query)
-li = my_env.LoopInfo('Transactions', 100)
+li = my_env.LoopInfo('Transactions', 1000)
 for row in res:
     li.info_loop()
     account = row['account_guid']
