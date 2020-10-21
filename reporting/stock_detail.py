@@ -19,7 +19,7 @@ logging.info("Start application")
 parser = argparse.ArgumentParser(
     description="Provide nid for the account."
 )
-parser.add_argument('-n', '--nid', type=int, default=165,
+parser.add_argument('-n', '--nid', type=int, default=38,
                     help='Provide the nid for the stock account')
 args = parser.parse_args()
 nid = args.nid

@@ -64,8 +64,13 @@ query = "SELECT DISTINCT account_type FROM accounts"
 res = gnudb.get_query(query)
 for row in res:
     cat = row['account_type']
+    if cat in ['STOCK', 'MUTUAL']:
+        cat_type = 'stock'
+    else:
+        cat_type = 'bank'
     cat_row = Category(
-        name=cat
+        name=cat,
+        cat_type=cat_type
     )
     session.add(cat_row)
     session.commit()

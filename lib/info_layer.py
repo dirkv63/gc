@@ -8,7 +8,7 @@ from lib.db_model import *
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-deltalist = ['Bankkosten', 'intresten', 'Minwaarde']
+deltalist = ['Bankkosten', 'intresten', 'Minwaarde', 'Verschil Rendement']
 
 
 class DirectConn:
@@ -162,7 +162,7 @@ class PandasConn:
         today = datetime.datetime.now().strftime("%Y-%m-%d")
         query = f"""
         SELECT groups.description as bank, categories.name as category, accounts.name as name, accounts.nid as nid,
-               accounts.description as description,
+               accounts.description as description, categories.cat_type as cat_type,
                max(transactions.date) as last_date,
                sum(transactions.value_num) as value_dec, max(transactions.value_denom) as value_denom,
                sum(quantity_num) as quantity_dec, max(quantity_denom) as quantity_denom,
@@ -180,10 +180,11 @@ class PandasConn:
         ORDER BY groups.description, categories.name, accounts.name
         """
         res = pd.read_sql_query(query, self.cnx)
-        res['quantity'] = np.where(res['category'] == 'BANK', np.NaN, res['quantity_dec'] / res['quantity_denom'])
-        res['bought'] = res['value_dec'] / res['value_denom']
-        res['value'] = np.where(res['price_denom'] > 0, res['quantity'] * (res['price_num'] / res['price_denom']),
-                                res['value_dec'] / res['value_denom'])
+        res['quantity'] = np.where(res['cat_type'] == 'bank', np.NaN, res['quantity_dec'] / res['quantity_denom'])
+        res['bought'] = np.where(res['cat_type'] == 'bank', res['quantity_dec'] / res['quantity_denom'],
+                                 res['value_dec'] / res['value_denom'])
+        res['value'] = np.where(res['cat_type'] == 'bank', res['quantity_dec'] / res['quantity_denom'],
+                                res['quantity'] * (res['price_num'] / res['price_denom']))
         for idx, row in res[res['description']=='spaarverzekering'].iterrows():
             verzekering_df = self.get_verzekering(row['nid'])
             last_row = verzekering_df.iloc[-1]
@@ -193,7 +194,7 @@ class PandasConn:
         res['delta'] = np.where(res['bought'] != res['value'], res['value'] - res['bought'], np.NaN)
         res['delta%'] = np.where(res['bought'] != res['value'], (res['value'] - res['bought']) / res['bought'], np.NaN)
         cols2drop = ['value_dec', 'value_denom', 'quantity_dec', 'quantity_denom', 'price_num', 'price_denom', 'nid',
-                     'description']
+                     'description', 'cat_type']
         res.drop(cols2drop, axis=1, inplace=True)
         list_dfs_per_bank = []
         for _, df_bank in res.groupby('bank', as_index=False):
@@ -271,18 +272,19 @@ class PandasConn:
         res['bought'] = res['value'].cumsum()
         last_row = res.iloc[-1]
         # Check if info from price table available else get last price from transactions
-        if res['value_denom'].size == 0:
+        if res['price_denom'].size == 0:
             last_price = last_row.loc['price']
-            logging.debug("Current price from transactions.")
+            logging.debug(f"Current price from transactions: {last_price}")
         else:
-            last_price = last_row.loc['value_num'] / last_row.loc['value_denom']
-            logging.debug("Current price from price database")
+            last_price = last_row.loc['price_num'] / last_row.loc['price_denom']
+            logging.debug(f"Current price from price database: {last_price}")
         res['current value'] = res['shares'] * last_price
-        res['pct'] = np.where(res['price'] == 0, 0, (last_price - res['price']) / res['price'])
         res['delta'] = res['current value'] - res['bought']
+        res['delta%'] = res['delta'] / res['bought']
+        res['price%'] = np.where(res['price'] == 0, 0, (last_price - res['price']) / res['price'])
         cols2drop = ['name', 'isin', 'description', 'value_num', 'value_denom', 'quantity_num', 'quantity_denom']
         res.drop(cols2drop, axis=1, inplace=True)
-        cols = ['date', 'quantity', 'price', 'value', 'shares', 'bought', 'current value', 'delta', 'pct']
+        cols = ['date', 'quantity', 'price', 'value', 'shares', 'bought', 'current value', 'delta', 'delta%', 'price%']
         return res[cols]
 
     def get_verzekering(self, nid):
@@ -305,14 +307,15 @@ class PandasConn:
         res['quantity'] = np.where(res['quantity_denom'] == 0, 0, res['quantity_num'] / res['quantity_denom'])
         res['month'] = pd.to_datetime(res.date).dt.to_period('M')
         res.drop(['value_num', 'value_denom', 'quantity_num', 'quantity_denom'], axis=1, inplace=True)
-        res['cat'] = np.where(res['description'].isin(deltalist), 'delta', 'savings')
+        res['cat'] = np.where(res['description'].isin(deltalist), 'bank', 'savings')
         per_month = pd.pivot_table(res, values='value', index=['month'], columns=['cat'], aggfunc=np.sum)
         per_month.reset_index(inplace=True)
-        per_month['change'] = per_month['savings'].fillna(0) + per_month['delta'].fillna(0)
+        per_month['change'] = per_month['savings'].fillna(0) + per_month['bank'].fillna(0)
         per_month['in'] = per_month['savings'].fillna(0).cumsum()
         per_month['total'] = per_month['change'].cumsum()
-        per_month['pct'] =  ((per_month['total'] - per_month['in']) / per_month ['in'])
-        cols = ['month', 'savings', 'delta', 'change', 'in', 'total', 'pct']
+        per_month['delta'] = per_month['total'] - per_month['in']
+        per_month['delta%'] = per_month['delta'] / per_month['in']
+        cols = ['month', 'savings', 'bank', 'change', 'in', 'total', 'delta', 'delta%']
         per_month = per_month[cols]
         return per_month
 
@@ -357,7 +360,7 @@ def format_stock(ws, fmt_dict):
     ws.set_column('B:F', None, fmt_dict['fmt_num'])
     ws.set_column('G:G', 16, fmt_dict['fmt_num'])
     ws.set_column('H:H', None, fmt_dict['fmt_num'])
-    ws.set_column('I:I', None, fmt_dict['fmt_pct'])
+    ws.set_column('I:J', None, fmt_dict['fmt_pct'])
     ws.set_column('A:A', 12)
     ws.freeze_panes(1,0)
     return
@@ -386,8 +389,8 @@ def format_verzekering(ws, fmt_dict):
     :param fmt_dict:
     :return:
     """
-    ws.set_column('B:F', None, fmt_dict['fmt_num'])
-    ws.set_column('G:G', None, fmt_dict['fmt_pct'])
+    ws.set_column('B:G', None, fmt_dict['fmt_num'])
+    ws.set_column('H:H', None, fmt_dict['fmt_pct'])
     ws.freeze_panes(1, 0)
     return
 

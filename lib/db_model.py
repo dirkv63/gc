@@ -32,6 +32,7 @@ class Category(Base):
     __tablename__ = "categories"
     nid = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(Text, nullable=False)
+    cat_type = Column(Text, nullable=False)
 
 class Group(Base):
     """
