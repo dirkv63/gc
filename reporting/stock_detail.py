@@ -45,5 +45,6 @@ df = pdc.get_stock(nid)
 df.to_excel(writer, sheet_name=name, index=False)
 # Format the output
 info_layer.format_stock(writer.sheets[name], fmt_dict)
+info_layer.chart(writer.book, writer.sheets[name], name, len(df))
 writer.save()
 logging.info("End Application")

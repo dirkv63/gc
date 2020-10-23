@@ -278,13 +278,13 @@ class PandasConn:
         else:
             last_price = last_row.loc['price_num'] / last_row.loc['price_denom']
             logging.debug(f"Current price from price database: {last_price}")
-        res['current value'] = res['shares'] * last_price
-        res['delta'] = res['current value'] - res['bought']
+        res['current'] = res['shares'] * last_price
+        res['delta'] = res['current'] - res['bought']
         res['delta%'] = res['delta'] / res['bought']
         res['price%'] = np.where(res['price'] == 0, 0, (last_price - res['price']) / res['price'])
         cols2drop = ['name', 'isin', 'description', 'value_num', 'value_denom', 'quantity_num', 'quantity_denom']
         res.drop(cols2drop, axis=1, inplace=True)
-        cols = ['date', 'quantity', 'price', 'value', 'shares', 'bought', 'current value', 'delta', 'delta%', 'price%']
+        cols = ['date', 'quantity', 'price', 'value', 'shares', 'bought', 'current', 'delta', 'delta%', 'price%']
         return res[cols]
 
     def get_verzekering(self, nid):
@@ -323,6 +323,31 @@ class PandasConn:
     def writer(ffn):
         return pd.ExcelWriter(ffn, engine='xlsxwriter')
 
+def chart(wb, ws, sheet_name, rows, cat="stock"):
+    """
+    Add chart to stock sheet.
+
+    :param wb: Workbook
+    :param ws: Worksheet
+    :param sheet_name: Name of the worksheet
+    :param rows: Number of rows in the sheet
+    :param cat: category of the chart: stock (default) or verzekering
+    :return:
+    """
+    col = 'G' if cat  == "verzekering" else 'H'
+    local_chart = wb.add_chart({'type': 'line'})
+    value_str = f"='{sheet_name}!${col}$2:${col}${rows+1}'"
+    category_str = f"='{sheet_name}!$A$2:$A${rows+1}'"
+    local_chart.add_series(dict(
+        values=value_str,
+        categories=category_str
+    ))
+    local_chart.set_legend({'none': True})
+    local_chart.set_title({'name': sheet_name})
+    # local_chart.set_x_axis({'date_axis': True})
+    ws.insert_chart('K3', local_chart)
+    return
+
 def format_account(ws, fmt_dict):
     """
     This function formats a spaarverzekering sheet.
@@ -358,7 +383,7 @@ def format_stock(ws, fmt_dict):
     :return:
     """
     ws.set_column('B:F', None, fmt_dict['fmt_num'])
-    ws.set_column('G:G', 16, fmt_dict['fmt_num'])
+    ws.set_column('G:G', None, fmt_dict['fmt_num'])
     ws.set_column('H:H', None, fmt_dict['fmt_num'])
     ws.set_column('I:J', None, fmt_dict['fmt_pct'])
     ws.set_column('A:A', 12)

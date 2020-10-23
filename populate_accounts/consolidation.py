@@ -43,11 +43,13 @@ for index, row in accounts.iterrows():
             df.to_excel(writer, sheet_name=account, index=False)
             # Format the output
             info_layer.format_verzekering(writer.sheets[account], fmt_dict)
+            info_layer.chart(writer.book, writer.sheets[account], account, len(df), 'verzekering')
     else:
         df = pdc.get_stock(row['nid'])
         if len(df.index) > 1:
             df.to_excel(writer, sheet_name=account, index=False)
             # Format the output
             info_layer.format_stock(writer.sheets[account], fmt_dict)
+            info_layer.chart(writer.book, writer.sheets[account], account, len(df))
 writer.save()
 logging.info("End Application")
