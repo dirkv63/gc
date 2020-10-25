@@ -33,12 +33,15 @@ def handle_account(acc_row, bank_id, p_id=None):
         account.parent_id = p_id
     if acc_row['account_type'] == 'STOCK' or acc_row['account_type'] == 'MUTUAL':
         account.isin = acc_row['cusip']
+    if acc_row['namespace'] == 'CURRENCY':
+        account.currency = acc_row['mnemonic']
     session.add(account)
     session.commit()
     session.refresh(account)
     parent_id = account.nid
     acc_query = f"""
-                SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code, commodity_guid
+                SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code, commodity_guid,
+                       mnemonic, namespace
                 FROM accounts 
                 LEFT JOIN commodities on commodities.guid=commodity_guid
                 WHERE parent_guid='{acc_guid}' 
@@ -108,7 +111,8 @@ for row in res:
 # Find name, guid, category for every account - recursively from root account.
 # Bank and Group accounts are identified with 'Placeholder=1'. A Bank account can have a Sub-Group (Effectenrekening).
 query = f"""
-SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code, commodity_guid
+SELECT accounts.guid as guid, name, account_type, cusip, placeholder, code, commodity_guid,
+       mnemonic, namespace
 FROM accounts 
 LEFT JOIN commodities on commodities.guid=commodity_guid
 WHERE parent_guid='{parent_guid}' 
@@ -118,3 +122,5 @@ res = gnudb.get_query(query)
 for row in res:
     group_id = groups[row['guid']]
     handle_account(row, group_id)
+gnudb.close()
+session.close()

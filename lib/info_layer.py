@@ -136,6 +136,7 @@ class DirectConn:
         """
         self.cur.execute(query)
         self.dbConn.commit()
+        print("Total", self.cur.rowcount, "Records updated successfully")
         return
 
 
@@ -143,6 +144,7 @@ class PandasConn:
 
     def __init__(self):
         self.cnx = connect4pandas()
+        self.xchange = self.get_exchange()
 
     def get_accounts(self):
         """
@@ -161,8 +163,9 @@ class PandasConn:
         """
         today = datetime.datetime.now().strftime("%Y-%m-%d")
         query = f"""
-        SELECT groups.description as bank, categories.name as category, accounts.name as name, accounts.nid as nid,
-               accounts.description as description, categories.cat_type as cat_type,
+        SELECT groups.description as bank, categories.name as cat, accounts.name as name, accounts.nid as nid,
+               accounts.description as description, categories.cat_type as cat_type, 
+               accounts.currency as curr, xrate.value_num as xrate,
                max(transactions.date) as last_date,
                sum(transactions.value_num) as value_dec, max(transactions.value_denom) as value_denom,
                sum(quantity_num) as quantity_dec, max(quantity_denom) as quantity_denom,
@@ -172,6 +175,7 @@ class PandasConn:
         JOIN groups ON groups.nid=accounts.group_id
         JOIN categories ON categories.nid=accounts.category_id
         LEFT JOIN price ON accounts.commodity_guid=price.commodity_guid
+        LEFT JOIN xrate ON accounts.currency=xrate.foreign_curr
         WHERE groups.category='BANK'
         AND transactions.date <= '{today}'
         AND length(groups.description) > 0
@@ -185,21 +189,25 @@ class PandasConn:
                                  res['value_dec'] / res['value_denom'])
         res['value'] = np.where(res['cat_type'] == 'bank', res['quantity_dec'] / res['quantity_denom'],
                                 res['quantity'] * (res['price_num'] / res['price_denom']))
+        # For verzekering calculate bought and value differently
         for idx, row in res[res['description']=='spaarverzekering'].iterrows():
             verzekering_df = self.get_verzekering(row['nid'])
             last_row = verzekering_df.iloc[-1]
             res.iloc[idx, res.columns.get_loc('bought')] = last_row.loc['in']
             res.iloc[idx, res.columns.get_loc('value')] = last_row.loc['total']
-        res['category'] = res['category'].str.capitalize()
+        res['cat'] = res['cat'].str.capitalize()
+        res['val(EUR)'] = np.where(res['curr'] == 'EUR',
+                                     res['value'], (res['value']*100)/res['xrate'])
         res['delta'] = np.where(res['bought'] != res['value'], res['value'] - res['bought'], np.NaN)
         res['delta%'] = np.where(res['bought'] != res['value'], (res['value'] - res['bought']) / res['bought'], np.NaN)
         cols2drop = ['value_dec', 'value_denom', 'quantity_dec', 'quantity_denom', 'price_num', 'price_denom', 'nid',
-                     'description', 'cat_type']
+                     'description', 'cat_type', 'xrate']
         res.drop(cols2drop, axis=1, inplace=True)
         list_dfs_per_bank = []
         for _, df_bank in res.groupby('bank', as_index=False):
             df_bank.loc['Total', 'bought'] = df_bank['bought'].sum()
             df_bank.loc['Total', 'value'] = df_bank['value'].sum()
+            df_bank.loc['Total', 'val(EUR)'] = df_bank['val(EUR)'].sum()
             df_bank.loc['Total', 'delta'] = df_bank.loc['Total', 'value'] - df_bank.loc['Total', 'bought']
             df_bank.loc['Total', 'delta%'] = df_bank.loc['Total', 'delta'] / df_bank.loc['Total', 'bought']
             list_dfs_per_bank.append(df_bank)
@@ -246,6 +254,17 @@ class PandasConn:
         ORDER BY groups.name, accounts.name
         """
         return  pd.read_sql_query(query, self.cnx)
+
+    def get_exchange(self):
+        """
+        This method gets the exchange rates and keeps them in dictionary.
+
+        :return: Dictionary with key Currency and value exchange rate.
+        """
+        query = "SELECT * FROM xrate"
+        res = pd.read_sql_query(query, self.cnx)
+        # Example from https://stackoverflow.com/questions/40924592/python-dictionary-comprehension-with-pandas
+        return dict(zip(res['foreign_curr'], res['value_num']))
 
     def get_stock(self, nid):
         """
@@ -398,11 +417,13 @@ def format_summary(ws, fmt_dict):
     :param fmt_dict:
     :return:
     """
-    ws.set_column('E:H', None, fmt_dict['fmt_num'])
-    ws.set_column('I:I', None, fmt_dict['fmt_pct'])
-    ws.set_column('A:B', 12)
-    ws.set_column('C:C', 36)
-    ws.set_column('D:D', 12)
+    ws.set_column('A:A', 12)
+    ws.set_column('B:B', 6)
+    ws.set_column('C:C', 32)
+    ws.set_column('D:D', 6)
+    ws.set_column('E:E', 10)
+    ws.set_column('F:J', None, fmt_dict['fmt_num'])
+    ws.set_column('K:K', None, fmt_dict['fmt_pct'])
     ws.freeze_panes(1, 0)
     return
 

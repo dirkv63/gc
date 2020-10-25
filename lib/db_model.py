@@ -17,6 +17,7 @@ class Account(Base):
     name = Column(Text, nullable=False)
     guid = Column(Text, nullable=False, unique=True)
     isin = Column(Text)
+    currency = Column(Text)
     placeholder = Column(Integer)
     description = Column(Text)
     commodity_guid = Column(Text)

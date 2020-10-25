@@ -13,6 +13,7 @@ scripts = [
     "20_populate_accounts",
     "30_populate_transactions",
     "40_populate_price",
+    "50_update_account_currency",
     "consolidation"
     ]
 
