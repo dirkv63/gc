@@ -1,3 +1,4 @@
+#!/opt/envs/gnu/bin/python
 """
 Script to get current DB info and load it into the database.
 """

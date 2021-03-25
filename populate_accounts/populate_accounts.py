@@ -1,3 +1,4 @@
+#!/opt/envs/gnu/bin/python
 """
 This script populates the accounts database and creates the consolidation excel.
 """

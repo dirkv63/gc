@@ -62,18 +62,6 @@ class Transaction(Base):
     quantity_denom = Column(Integer)
     description = Column(Text)
 
-class Share(Base):
-    """
-    Table containing the shares records
-    """
-    __tablename__ = "shares"
-    nid = Column(Integer, primary_key=True, autoincrement=True)
-    account_id = Column(Integer, ForeignKey('accounts.nid'), nullable=False)
-    transaction_id = Column(Integer, ForeignKey('transactions.nid'), nullable=False)
-    price = Column(Float)
-    shares = Column(Float)
-    cost = Column(Float)
-
 class Price(Base):
     """
     Table containing Price information for commodities.
