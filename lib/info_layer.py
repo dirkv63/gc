@@ -165,7 +165,7 @@ class PandasConn:
         query = f"""
         SELECT groups.description as bank, categories.name as cat, accounts.name as name, accounts.nid as nid,
                accounts.description as description, categories.cat_type as cat_type, 
-               accounts.currency as curr, xrate.value_num as xrate,
+               accounts.currency as curr, xrate.value_num as xrate, xrate.value_denom as xrate_denom,
                max(transactions.date) as last_date,
                sum(transactions.value_num) as value_dec, max(transactions.value_denom) as value_denom,
                sum(quantity_num) as quantity_dec, max(quantity_denom) as quantity_denom,
@@ -197,11 +197,11 @@ class PandasConn:
             res.iloc[idx, res.columns.get_loc('value')] = last_row.loc['total']
         res['cat'] = res['cat'].str.capitalize()
         res['val(EUR)'] = np.where(res['curr'] == 'EUR',
-                                     res['value'], (res['value']*100)/res['xrate'])
+                                     res['value'], (res['value']*res['xrate_denom'])/res['xrate'])
         res['delta'] = np.where(res['bought'] != res['value'], res['value'] - res['bought'], np.NaN)
         res['delta%'] = np.where(res['bought'] != res['value'], (res['value'] - res['bought']) / res['bought'], np.NaN)
         cols2drop = ['value_dec', 'value_denom', 'quantity_dec', 'quantity_denom', 'price_num', 'price_denom', 'nid',
-                     'description', 'cat_type', 'xrate']
+                     'description', 'cat_type', 'xrate', 'xrate_denom']
         res.drop(cols2drop, axis=1, inplace=True)
         list_dfs_per_bank = []
         for _, df_bank in res.groupby('bank', as_index=False):
