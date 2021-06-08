@@ -274,7 +274,7 @@ class PandasConn:
         :return:
         """
         query = f"""
-        SELECT accounts.name as name, isin, transactions.date as date, transactions.description, 
+        SELECT DISTINCT accounts.name as name, isin, transactions.date as date, transactions.description, 
                transactions.value_num as value_num, transactions.value_denom as value_denom, quantity_num, 
                quantity_denom, price.value_num as price_num, price.value_denom as price_denom
         FROM transactions
@@ -314,7 +314,7 @@ class PandasConn:
         :return:
         """
         query = f"""
-        SELECT accounts.name as name, isin, date, transactions.description as description, 
+        SELECT DISTINCT accounts.name as name, isin, date, transactions.description as description, 
                value_num, value_denom, quantity_num, quantity_denom
         FROM transactions
         JOIN accounts ON accounts.nid=transactions.account_id

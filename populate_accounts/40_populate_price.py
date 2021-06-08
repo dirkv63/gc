@@ -19,7 +19,7 @@ session = info_layer.init_session(os.getenv('ACCOUNTDIR'), os.getenv('ACCOUNTNAM
 
 # Get latest price per fund from prices database
 query = """
-SELECT commodity_guid, mnemonic, date, value_denom, value_num
+SELECT DISTINCT commodity_guid, mnemonic, date, value_denom, value_num
 FROM
     (SELECT commodity_guid AS max_commodity_guid, max(date) AS max_date
     FROM prices
